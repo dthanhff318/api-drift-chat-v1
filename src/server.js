@@ -3,6 +3,7 @@ const cors = require("cors");
 const createServer = require("http").createServer;
 const Server = require("socket.io").Server;
 const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
 const connect = require("./mongoDbConfig/mongoConfig");
 const apiV1 = require("./routes");
 
@@ -18,13 +19,15 @@ const io = new Server(httpServer, {
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 connect();
 
 app.use("/v1", apiV1);
-app.get("/v1", (req, res) => {
-  res.json("hihi");
-});
+
 httpServer.listen(process.env.PORT, process.env.BASE_URL, () => {
   console.log("Server is running in Port 4000");
 });
