@@ -1,10 +1,8 @@
 const express = require("express");
-const { genAccessToken } = require("../utilities/tokenHelper");
+const { verifyToken } = require("../middlewares");
+const friendController = require("../controllers/friendController");
 const friendRoute = express.Router();
 
-friendRoute.get("/", (req, res) => {
-  const aTk = genAccessToken("hi");
-  res.json(aTk);
-});
+friendRoute.get("/", verifyToken, friendController.getInfoCommunication);
 
 module.exports = friendRoute;

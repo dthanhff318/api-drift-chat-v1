@@ -10,6 +10,14 @@ const friendSchema = new mongoose.Schema({
     type: [{ type: String, ref: "User" }],
     default: [],
   },
+  listRequest: {
+    type: [{ type: String, ref: "User" }],
+    default: [],
+  },
+  listAccept: {
+    type: [{ type: String, ref: "User" }],
+    default: [],
+  },
   listBlock: {
     type: [{ type: String, ref: "User" }],
     default: [],
