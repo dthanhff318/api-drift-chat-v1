@@ -39,6 +39,7 @@ io.on("connection", (socket) => {
     socket.join(roomId);
     console.log(`${socket.id} join room ${roomId}`);
   });
+
   socket.on("leftRoom", (roomId) => {
     socket.leave(roomId);
     console.log(`${socket.id} leave room ${roomId}`);
