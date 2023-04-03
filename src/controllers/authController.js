@@ -15,6 +15,8 @@ const authControllers = {
         .json({ ...findUser, accessToken, refreshToken });
     } else {
       const newUser = new User(req.body);
+      const newFriends = new Friend({ uid });
+      await newFriends.save();
       const infoNewUser = await newUser.save();
 
       return res
