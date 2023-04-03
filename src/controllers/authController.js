@@ -7,12 +7,13 @@ const authControllers = {
   loginWithFireBase: async (req, res) => {
     const { uid } = req.body;
     const findUser = await User.findOne({ uid });
+    console.log(findUser);
     const accessToken = genAccessToken(uid);
     const refreshToken = genRefreshToken(uid);
     if (findUser) {
       return res
         .status(HTTPStatusCode.OK)
-        .json({ ...findUser, accessToken, refreshToken });
+        .json({ ...findUser._doc, accessToken, refreshToken });
     } else {
       const newUser = new User(req.body);
       const newFriends = new Friend({ uid });
@@ -21,7 +22,7 @@ const authControllers = {
 
       return res
         .status(HTTPStatusCode.OK)
-        .json({ ...infoNewUser, accessToken, refreshToken });
+        .json({ ...infoNewUser._doc, accessToken, refreshToken });
     }
   },
 };

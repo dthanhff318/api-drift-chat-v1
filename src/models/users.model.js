@@ -25,6 +25,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  isOnline: {
+    type: Boolean,
+    default: false,
+  },
+  lastActive: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 // Tell Mongoose to include virtual properties when converting documents to JSON
