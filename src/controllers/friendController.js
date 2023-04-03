@@ -9,6 +9,7 @@ const friendController = {
       const accessToken = req.headers.authorization.split(" ")[1];
       const data = decodeToken(accessToken);
       const infoCm = await Friend.findOne({ uid: data.uid });
+      // Check infoCommunication is created
       if (infoCm) {
         return res.status(HTTPStatusCode.OK).json(infoCm);
       } else {
