@@ -29,33 +29,33 @@ const friendController = {
   addFriend: async (req, res) => {
     try {
       // nguoi duoc gui loi moi
-      const friendAcp = await Friend.findOne({ uid: req.body.acceptId });
+      const enemy = await Friend.findOne({ uid: req.body.acceptId });
       // nguoi gui loi moi
       const me = await Friend.findOne({ uid: req.body.reqId });
-      if (!friendAcp | !me) {
+      if (!enemy | !me) {
         return res.status(HTTPStatusCode.NOT_FOUND).json("User not found");
       }
-      const newListAccept = friendAcp.listAccept;
+      const listEnemyAccept = enemy.listAccept;
       const newListRequest = me.listRequest;
-      // console.log(newListAccept, newListRequest);
-      if (!newListAccept.includes(req.body.reqId)) {
-        newListAccept.push(req.body.reqId);
+      // console.log(listEnemyAccept, newListRequest);
+      if (!listEnemyAccept.includes(req.body.reqId)) {
+        listEnemyAccept.push(req.body.reqId);
         newListRequest.push(req.body.acceptId);
-        friendAcp.listAccept = newListAccept;
+        enemy.listAccept = listEnemyAccept;
         me.listRequest = newListRequest;
-        await friendAcp.save();
+        await enemy.save();
         await me.save();
-        return res.status(HTTPStatusCode.OK).json(newListAccept);
+        return res.status(HTTPStatusCode.OK).json({listEnemyAccept,newListRequest});
       } else {
-        const indexAccept = newListAccept.indexOf(req.body.reqId);
+        const indexAccept = listEnemyAccept.indexOf(req.body.reqId);
         const indexReq = newListRequest.indexOf(req.body.acceptId);
         if (indexAccept !== -1 && indexReq !== -1) {
           console.log(newListRequest);
-          newListAccept.splice(index, 1);
-          newListRequest.splice(index, 1);
-          friendAcp.listAccept = newListAccept;
+          listEnemyAccept.splice(indexAccept, 1);
+          newListRequest.splice(indexReq, 1);
+          enemy.listAccept = listEnemyAccept;
           me.listRequest = newListRequest;
-          await friendAcp.save();
+          await enemy.save();
           await me.save();
           return res.status(HTTPStatusCode.OK).json("da huy yeu cau ket ban !");
         }
