@@ -3,8 +3,13 @@ const { HTTPStatusCode } = require("../constants");
 
 const servicesController = {
   getUsers: async (req, res) => {
-    const listUsers = await User.find({});
-    return res.status(HTTPStatusCode.OK).json(listUsers);
+    try {
+      const senderUid = req.infoUser.uid;
+      const listUsers = await User.find({ uid: { $ne: senderUid } });
+      return res.status(HTTPStatusCode.OK).json(listUsers);
+    } catch (err) {
+      console.log(err);
+    }
   },
   searchUser: async (req, res) => {
     const query = req.query.q;
