@@ -3,18 +3,21 @@ require("dotenv").config();
 
 const genAccessToken = (uid) => {
   return jwt.sign({ uid }, process.env.ACCESSTOKEN_KEY, {
-    expiresIn: "1h",
+    expiresIn: "10m",
   });
 };
 
 const genRefreshToken = (uid) => {
   return jwt.sign({ uid }, process.env.REFRESHTOKEN_KEY, {
-    expiresIn: "7h",
+    expiresIn: "10h",
   });
 };
 
-const decodeToken = async (token) => {
-  return jwt.verify(token, process.env.ACCESSTOKEN_KEY);
+const decodeToken = async (token, isAccess = true) => {
+  return jwt.verify(
+    token,
+    isAccess ? process.env.ACCESSTOKEN_KEY : process.env.REFRESHTOKEN_KEY
+  );
 };
 
 module.exports = {
