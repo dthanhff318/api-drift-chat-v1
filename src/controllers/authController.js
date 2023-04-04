@@ -1,4 +1,8 @@
-const { genAccessToken, genRefreshToken } = require("../utilities/tokenHelper");
+const {
+  genAccessToken,
+  genRefreshToken,
+  decodeToken,
+} = require("../utilities/tokenHelper");
 const User = require("../models/users.model");
 const { HTTPStatusCode } = require("../constants");
 const Friend = require("../models/friends.model");
@@ -23,6 +27,20 @@ const authControllers = {
       return res
         .status(HTTPStatusCode.OK)
         .json({ ...infoNewUser._doc, accessToken, refreshToken });
+    }
+  },
+  refreshToken: async (req, res) => {
+    try {
+      const refreshTk = req.body.refresh;
+      const decodeTokenValue = await decodeToken(refreshTk, false);
+      const accessToken = genAccessToken(decodeTokenValue.uid);
+      const refreshToken = genRefreshToken(decodeTokenValue.uid);
+      return res.status(HTTPStatusCode.OK).json({
+        accessToken,
+        refreshToken,
+      });
+    } catch (err) {
+      console.log(err);
     }
   },
 };
