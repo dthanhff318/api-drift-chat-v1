@@ -45,7 +45,9 @@ const friendController = {
         me.listRequest = newListRequest;
         await enemy.save();
         await me.save();
-        return res.status(HTTPStatusCode.OK).json({listEnemyAccept,newListRequest});
+        return res
+          .status(HTTPStatusCode.OK)
+          .json({ listEnemyAccept, newListRequest });
       } else {
         const indexAccept = listEnemyAccept.indexOf(req.body.reqId);
         const indexReq = newListRequest.indexOf(req.body.acceptId);
