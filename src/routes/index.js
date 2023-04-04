@@ -6,7 +6,7 @@ const messageRoute = require("./messageRoute");
 const servicesRoute = require("./servicesRoute");
 
 apiV1.use("/auth", authRoute);
-apiV1.use("/friend", friendRoute);
+apiV1.use("/friends", friendRoute);
 apiV1.use("/services", servicesRoute);
 apiV1.use("/message", messageRoute);
 

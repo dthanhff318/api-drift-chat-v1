@@ -6,16 +6,21 @@ const Friend = require("../models/friends.model");
 const friendController = {
   getInfoCommunication: async (req, res) => {
     try {
-      const accessToken = req.headers.authorization.split(" ")[1];
-      const data = decodeToken(accessToken);
-      const infoCm = await Friend.findOne({ uid: data.uid });
+      const uid = req.infoUser.uid;
+      const infoCm = await Friend.findOne(
+        { uid },
+        {
+          listFriend: 1,
+          listRequest: 1,
+          listAccept: 1,
+          listBlock: 1,
+        }
+      );
       // Check infoCommunication is created
       if (infoCm) {
         return res.status(HTTPStatusCode.OK).json(infoCm);
       } else {
-        const newInfoCommunication = new Friend({ uid: data.uid });
-        const initInfoCm = await newInfoCommunication.save();
-        return res.status(HTTPStatusCode.OK).json(initInfoCm);
+        return res.status(HTTPStatusCode.BAD_REQUEST).json("Not found");
       }
     } catch (err) {
       return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
