@@ -31,8 +31,10 @@ const friendController = {
       }
       const listEnemyAccept = enemy.listAccept;
       const newListRequest = me.listRequest;
-      // console.log(listEnemyAccept, newListRequest);
-      if (!listEnemyAccept.includes(req.body.reqId)) {
+      console.log(listEnemyAccept);
+      const indexAccept = listEnemyAccept.indexOf(req.body.reqId);
+        const indexReq = newListRequest.indexOf(req.body.acceptId);
+      if (indexAccept === -1 && indexReq === -1) {
         listEnemyAccept.push(req.body.reqId);
         newListRequest.push(req.body.acceptId);
         enemy.listAccept = listEnemyAccept;
@@ -41,10 +43,6 @@ const friendController = {
         await me.save();
         return res.status(HTTPStatusCode.OK).json({listEnemyAccept,newListRequest});
       } else {
-        const indexAccept = listEnemyAccept.indexOf(req.body.reqId);
-        const indexReq = newListRequest.indexOf(req.body.acceptId);
-        if (indexAccept !== -1 && indexReq !== -1) {
-          console.log(newListRequest);
           listEnemyAccept.splice(indexAccept, 1);
           newListRequest.splice(indexReq, 1);
           enemy.listAccept = listEnemyAccept;
@@ -52,8 +50,6 @@ const friendController = {
           await enemy.save();
           await me.save();
           return res.status(HTTPStatusCode.OK).json("da huy yeu cau ket ban !");
-        }
-        return res.status(HTTPStatusCode.OK).json("da huy yeu cau ket ban !");
       }
     } catch (err) {
       return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
