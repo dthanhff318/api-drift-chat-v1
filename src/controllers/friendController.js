@@ -26,38 +26,39 @@ const friendController = {
       return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
     }
   },
-  addFriend: async (req, res) => {
+  sendRqAddFriend: async (req, res) => {
     try {
-      // nguoi duoc gui loi moi
+      const senderUid = req.infoUser.uid;
+      // Receiver
       const enemy = await Friend.findOne({ uid: req.body.acceptId });
-      // nguoi gui loi moi
-      const me = await Friend.findOne({ uid: req.body.reqId });
+      // Sender
+      const me = await Friend.findOne({ uid: senderUid });
       if (!enemy | !me) {
         return res.status(HTTPStatusCode.NOT_FOUND).json("User not found");
       }
       const listEnemyAccept = enemy.listAccept;
       const newListRequest = me.listRequest;
-      console.log(listEnemyAccept);
       const indexAccept = listEnemyAccept.indexOf(req.body.reqId);
-        const indexReq = newListRequest.indexOf(req.body.acceptId);
+      const indexReq = newListRequest.indexOf(req.body.acceptId);
       if (indexAccept === -1 && indexReq === -1) {
         listEnemyAccept.push(req.body.reqId);
         newListRequest.push(req.body.acceptId);
         enemy.listAccept = listEnemyAccept;
         me.listRequest = newListRequest;
+        await Friend.findOneAndUpdate({ uid: req.body.acceptId });
         await enemy.save();
         await me.save();
         return res
           .status(HTTPStatusCode.OK)
           .json({ listEnemyAccept, newListRequest });
       } else {
-          listEnemyAccept.splice(indexAccept, 1);
-          newListRequest.splice(indexReq, 1);
-          enemy.listAccept = listEnemyAccept;
-          me.listRequest = newListRequest;
-          await enemy.save();
-          await me.save();
-          return res.status(HTTPStatusCode.OK).json("da huy yeu cau ket ban !");
+        listEnemyAccept.splice(indexAccept, 1);
+        newListRequest.splice(indexReq, 1);
+        enemy.listAccept = listEnemyAccept;
+        me.listRequest = newListRequest;
+        await enemy.save();
+        await me.save();
+        return res.status(HTTPStatusCode.OK).json("da huy yeu cau ket ban !");
       }
     } catch (err) {
       return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
