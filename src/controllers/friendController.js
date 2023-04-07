@@ -38,27 +38,47 @@ const friendController = {
       }
       const listEnemyAccept = enemy.listAccept;
       const newListRequest = me.listRequest;
-      const indexAccept = listEnemyAccept.indexOf(req.body.reqId);
+      const indexAccept = listEnemyAccept.indexOf(senderUid);
       const indexReq = newListRequest.indexOf(req.body.acceptId);
       if (indexAccept === -1 && indexReq === -1) {
-        listEnemyAccept.push(req.body.reqId);
+        listEnemyAccept.push(senderUid);
         newListRequest.push(req.body.acceptId);
         enemy.listAccept = listEnemyAccept;
         me.listRequest = newListRequest;
-        await Friend.findOneAndUpdate({ uid: req.body.acceptId });
-        await enemy.save();
-        await me.save();
-        return res
-          .status(HTTPStatusCode.OK)
-          .json({ listEnemyAccept, newListRequest });
+        await Friend.findOneAndUpdate(
+          { uid: req.body.acceptId },
+          {
+            listAccept: listEnemyAccept,
+          }
+        );
+        const updateListRequest = await Friend.findOneAndUpdate(
+          { uid: senderUid },
+          {
+            listRequest: newListRequest,
+          },
+          { new: true }
+        );
+        return res.status(HTTPStatusCode.OK).json(updateListRequest);
       } else {
         listEnemyAccept.splice(indexAccept, 1);
         newListRequest.splice(indexReq, 1);
         enemy.listAccept = listEnemyAccept;
         me.listRequest = newListRequest;
-        await enemy.save();
-        await me.save();
-        return res.status(HTTPStatusCode.OK).json("da huy yeu cau ket ban !");
+        await Friend.findOneAndUpdate(
+          { uid: req.body.acceptId },
+          {
+            listAccept: listEnemyAccept,
+          }
+        );
+        const updateListRequest = await Friend.findOneAndUpdate(
+          { uid: senderUid },
+          {
+            listRequest: newListRequest,
+          },
+          { new: true }
+        );
+
+        return res.status(HTTPStatusCode.OK).json(updateListRequest);
       }
     } catch (err) {
       return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);

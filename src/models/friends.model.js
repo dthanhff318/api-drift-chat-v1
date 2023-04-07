@@ -7,7 +7,7 @@ const friendSchema = new mongoose.Schema({
     unique: true,
   },
   listFriend: {
-    type: [{ type: String, ref: "User" }],
+    type: [{ type: String,  ref: "User" }],
     default: [],
   },
   listRequest: {
