@@ -1,6 +1,4 @@
-const User = require("../models/users.model");
 const { HTTPStatusCode } = require("../constants");
-const { decodeToken } = require("../utilities/tokenHelper");
 const Friend = require("../models/friends.model");
 
 const friendController = {
@@ -88,20 +86,23 @@ const friendController = {
   acceptFrRequest: async (req, res) => {
     try {
       const uid = req.infoUser.uid;
-      const acceptUid = req.acceptUid;
+      const acceptUid = req.body.acceptUid;
       await Friend.findOneAndUpdate(
         { uid: acceptUid },
         {
-          $push: { listFriend: uid },
+          $addToSet: { listFriend: uid },
+          $pull: { listRequest: uid },
         }
       );
       const newInfoCm = await Friend.findOneAndUpdate(
         { uid },
         {
-          $push: { listFriend: acceptUid },
+          $addToSet: { listFriend: acceptUid },
+          $pull: { listAccept: acceptUid },
         },
         { new: true }
       );
+      console.log(newInfoCm);
       return res.status(HTTPStatusCode.OK).json(newInfoCm);
     } catch (err) {
       return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
