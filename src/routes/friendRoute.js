@@ -5,5 +5,6 @@ const friendRoute = express.Router();
 
 friendRoute.get("/", verifyToken, friendController.getInfoCommunication);
 friendRoute.post("/send-add", verifyToken, friendController.sendRqAddFriend);
+friendRoute.post("/accept", verifyToken, friendController.acceptFrRequest);
 
 module.exports = friendRoute;

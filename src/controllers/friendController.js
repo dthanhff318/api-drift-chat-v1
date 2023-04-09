@@ -7,16 +7,15 @@ const friendController = {
   getInfoCommunication: async (req, res) => {
     try {
       const uid = req.infoUser.uid;
-      const infoCm = await Friend.findOne(
-        { uid },
-        {
-          listFriend: 1,
-          listRequest: 1,
-          listAccept: 1,
-          listBlock: 1,
-        }
-      );
-      // Check infoCommunication is created
+      const infoCm = await (
+        await Friend.findOne({ uid })
+      ).populate({
+        path: "listFriend listAccept listRequest listBlock",
+        model: "User",
+        select: "displayName photoUrl lastActive",
+        localField: "uid",
+        foreignField: "uid",
+      });
       if (infoCm) {
         return res.status(HTTPStatusCode.OK).json(infoCm);
       } else {
@@ -26,6 +25,7 @@ const friendController = {
       return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
     }
   },
+  // Send request add friend or cancel request
   sendRqAddFriend: async (req, res) => {
     try {
       const senderUid = req.infoUser.uid;
@@ -80,6 +80,29 @@ const friendController = {
 
         return res.status(HTTPStatusCode.OK).json(updateListRequest);
       }
+    } catch (err) {
+      return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
+    }
+  },
+  // Accept friend request
+  acceptFrRequest: async (req, res) => {
+    try {
+      const uid = req.infoUser.uid;
+      const acceptUid = req.acceptUid;
+      await Friend.findOneAndUpdate(
+        { uid: acceptUid },
+        {
+          $push: { listFriend: uid },
+        }
+      );
+      const newInfoCm = await Friend.findOneAndUpdate(
+        { uid },
+        {
+          $push: { listFriend: acceptUid },
+        },
+        { new: true }
+      );
+      return res.status(HTTPStatusCode.OK).json(newInfoCm);
     } catch (err) {
       return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
     }
