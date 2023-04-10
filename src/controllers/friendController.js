@@ -1,5 +1,6 @@
 const { HTTPStatusCode } = require("../constants");
 const Friend = require("../models/friends.model");
+const Group = require("../models/groups.model");
 
 const friendController = {
   getInfoCommunication: async (req, res) => {
@@ -102,7 +103,14 @@ const friendController = {
         },
         { new: true }
       );
-      console.log(newInfoCm);
+      const dataGroup = {
+        members: [uid, acceptUid],
+        create_by: uid,
+        listAdmin: [uid, acceptUid],
+      };
+      const newGroup = await new Group(dataGroup);
+      console.log(newGroup);
+      await newGroup.save();
       return res.status(HTTPStatusCode.OK).json(newInfoCm);
     } catch (err) {
       return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);

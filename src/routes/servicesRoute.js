@@ -5,5 +5,6 @@ const servicesRoute = express.Router();
 
 servicesRoute.get("/users", verifyToken, servicesController.getUsers);
 servicesRoute.get("/search", servicesController.searchUser);
+servicesRoute.get("/groups", verifyToken, servicesController.getGroups);
 
 module.exports = servicesRoute;

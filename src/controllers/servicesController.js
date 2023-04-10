@@ -1,4 +1,5 @@
 const User = require("../models/users.model");
+const Group = require("../models/groups.model");
 const { HTTPStatusCode } = require("../constants");
 
 const servicesController = {
@@ -21,6 +22,15 @@ const servicesController = {
       displayName: { $regex: query, $options: "i" },
     });
     res.status(200).json(users);
+  },
+  getGroups: async (req, res) => {
+    try {
+      const userId = req.infoUser.uid;
+      const groups = await Group.find({ members: { $in: [userId] } });
+      return res.status(HTTPStatusCode.OK).json(groups);
+    } catch (err) {
+      console.log(err);
+    }
   },
 };
 
