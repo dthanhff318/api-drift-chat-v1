@@ -1,3 +1,4 @@
+const Group = require("../models/groups.model");
 const { HTTPStatusCode } = require("../constants");
 const Friend = require("../models/friends.model");
 
@@ -102,7 +103,15 @@ const friendController = {
         },
         { new: true }
       );
-      console.log(newInfoCm);
+      const group = {
+        members:[acceptUid,uid],
+        typeGroup:false, 
+        listAdmin:[acceptUid,uid]
+      }
+      const newGroup = new Group(group)
+      await newGroup.save()
+      console.log("add friend success!");
+      console.log("newGroup",newGroup);
       return res.status(HTTPStatusCode.OK).json(newInfoCm);
     } catch (err) {
       return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);

@@ -1,14 +1,8 @@
 const mongoose = require("mongoose");
 
 const groupSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   name: {
     type: String,
-    require: true,
   },
   members: [
     {
@@ -25,7 +19,6 @@ const groupSchema = new mongoose.Schema({
   ],
   create_by: {
     type: String,
-    require: true,
   },
   listAdmin: [
     {
@@ -34,6 +27,10 @@ const groupSchema = new mongoose.Schema({
       require: true,
     },
   ],
+  typeGroup:{
+    type:Boolean,
+    require:true
+  }
 });
 
 const Group = mongoose.model("Group", groupSchema);
