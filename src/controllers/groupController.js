@@ -7,19 +7,20 @@ const groupController =  {
         try{
             const uid = req.infoUser.uid;
             console.log(uid);
-            const newGroup = await Group.find({members:{$in:[uid]}}
-            //     ,(err,groups) => 
-            // {
-            //     if(err){
-            //         console.log(err);
-            //         return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json({message:"INTERNAL_SERVER_ERROR"})
-            //     }else if(groups.length === 0){
-            //         return res.status(HTTPStatusCode.NOT_FOUND).json({message:"no group found"})
-            //     }else{
-            //         return res.status(HTTPStatusCode.OK).json(groups)
-            //     }
-            // }
-            )
+            const newGroup = await Group.find({members:{$in:[uid]}}).populate({
+                path: "members",
+                model: "User",
+                select: "displayName photoUrl lastActive uid ",
+                localField: "uid",
+                foreignField: "uid",
+              })
+              .populate({
+                path: "message",
+                model: "Message",
+                select: "senderId content",
+                localField: "group",
+                foreignField: "group",
+              })
             if(newGroup.length === 0){
                 return res.status(HTTPStatusCode.NOT_FOUND).json({message:"no group found"})
             }else{
