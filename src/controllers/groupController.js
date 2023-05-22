@@ -6,7 +6,6 @@ const groupController =  {
     getAllGroup: async (req,res) => {
         try{
             const uid = req.infoUser.uid;
-            console.log(uid);
             const newGroup = await Group.find({members:{$in:[uid]}}).populate({
                 path: "members",
                 model: "User",
