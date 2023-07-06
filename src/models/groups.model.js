@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { toJSON, paginate } = require("./plugins");
 
 const groupSchema = new mongoose.Schema({
   name: {
@@ -11,12 +12,6 @@ const groupSchema = new mongoose.Schema({
       require: true,
     },
   ],
-  message: [
-    {
-      type: String,
-      ref: "Message",
-    },
-  ],
   create_by: {
     type: String,
   },
@@ -27,11 +22,13 @@ const groupSchema = new mongoose.Schema({
       require: true,
     },
   ],
-  typeGroup:{
-    type:Boolean,
-    require:true
-  }
+  typeGroup: {
+    type: Boolean,
+    require: true,
+  },
 });
+
+groupSchema.plugin(toJSON);
 
 const Group = mongoose.model("Group", groupSchema);
 module.exports = Group;
