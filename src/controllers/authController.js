@@ -11,7 +11,7 @@ const authControllers = {
   loginWithFireBase: async (req, res) => {
     const { uid } = req.body;
     const findUser = await User.findOne({ uid });
-    console.log(findUser);
+    console.log("findUser", findUser);
     const accessToken = genAccessToken(uid);
     const refreshToken = genRefreshToken(uid);
     if (findUser) {
