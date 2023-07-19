@@ -46,7 +46,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMess", (data) => {
-    socket.broadcast.to(data.roomId).emit("sendMess", data);
+    console.log({ data });
+    socket.broadcast.to(data.group).emit("sendMess", data);
+    socket.broadcast.emit("sendMess", data);
   });
 
   socket.on("disconnect", () => {
