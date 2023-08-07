@@ -12,19 +12,16 @@ const groupSchema = new mongoose.Schema({
       require: true,
     },
   ],
-  create_by: {
-    type: String,
-  },
   listAdmin: [
     {
       type: String,
       ref: "User",
-      require: true,
     },
   ],
-  typeGroup: {
+  isGroup: {
     type: Boolean,
     require: true,
+    default: false,
   },
 });
 

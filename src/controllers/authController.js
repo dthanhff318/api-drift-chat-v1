@@ -6,27 +6,36 @@ const {
 const User = require("../models/users.model");
 const { HTTPStatusCode } = require("../constants");
 const Friend = require("../models/friends.model");
+const authServices = require("../services/authServices");
 
 const authControllers = {
   loginWithFireBase: async (req, res) => {
     const { uid } = req.body;
     const findUser = await User.findOne({ uid });
-    console.log("findUser", findUser);
-    const accessToken = genAccessToken(uid);
-    const refreshToken = genRefreshToken(uid);
     if (findUser) {
-      return res
-        .status(HTTPStatusCode.OK)
-        .json({ ...findUser._doc, accessToken, refreshToken });
+      const accessToken = genAccessToken(findUser.id);
+      const refreshToken = genRefreshToken(findUser.id);
+      const dataResponse = {
+        user: findUser,
+        token: {
+          accessToken,
+          refreshToken,
+        },
+      };
+      return res.status(HTTPStatusCode.OK).json(dataResponse);
     } else {
-      const newUser = new User(req.body);
-      const newFriends = new Friend({ uid });
-      await newFriends.save();
-      const infoNewUser = await newUser.save();
-
-      return res
-        .status(HTTPStatusCode.OK)
-        .json({ ...infoNewUser._doc, accessToken, refreshToken });
+      const userObj = new User(req.body);
+      const user = await userObj.save();
+      const accessToken = genAccessToken(user.id);
+      const refreshToken = genRefreshToken(user.id);
+      const dataResponse = {
+        user,
+        token: {
+          accessToken,
+          refreshToken,
+        },
+      };
+      return res.status(HTTPStatusCode.OK).json(dataResponse);
     }
   },
   refreshToken: async (req, res) => {
@@ -39,6 +48,15 @@ const authControllers = {
         accessToken,
         refreshToken,
       });
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  getCurrentUser: async (req, res) => {
+    try {
+      const { id } = req.infoUser;
+      const user = await authServices.getUserById(id);
+      return res.status(HTTPStatusCode.OK).json(user);
     } catch (err) {
       console.log(err);
     }
