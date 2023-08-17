@@ -26,6 +26,8 @@ const authControllers = {
     } else {
       const userObj = new User(req.body);
       const user = await userObj.save();
+      const friendObj = new Friend({ userId: user.id });
+      friendObj.save();
       const accessToken = genAccessToken(user.id);
       const refreshToken = genRefreshToken(user.id);
       const dataResponse = {

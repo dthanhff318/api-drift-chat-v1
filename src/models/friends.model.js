@@ -1,25 +1,29 @@
 const mongoose = require("mongoose");
 
 const friendSchema = new mongoose.Schema({
-  uid: {
+  userId: {
     type: String,
     required: true,
     unique: true,
   },
   listFriend: {
     type: [{ type: String, ref: "User" }],
+    required: true,
     default: [],
   },
   listRequest: {
     type: [{ type: String, ref: "User" }],
+    required: true,
     default: [],
   },
   listAccept: {
     type: [{ type: String, ref: "User" }],
+    required: true,
     default: [],
   },
   listBlock: {
     type: [{ type: String, ref: "User" }],
+    required: true,
     default: [],
   },
 });
