@@ -4,6 +4,7 @@ const { toJSON, paginate } = require("./plugins");
 const groupSchema = new mongoose.Schema({
   name: {
     type: String,
+    default: null,
   },
   members: [
     {
@@ -12,7 +13,7 @@ const groupSchema = new mongoose.Schema({
       require: true,
     },
   ],
-  listAdmin: [
+  admins: [
     {
       type: String,
       ref: "User",

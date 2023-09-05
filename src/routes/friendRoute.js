@@ -12,6 +12,6 @@ friendRoute.post(
   validate(friendValidation.sendAddFriend),
   friendController.addFriend
 );
-friendRoute.post("/accept", verifyToken, friendController.addFriend);
+friendRoute.post("/accept", verifyToken, friendController.acceptFriend);
 
 module.exports = friendRoute;
