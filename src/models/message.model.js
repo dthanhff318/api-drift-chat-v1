@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { toJSON, paginate } = require("./plugins");
 
 const messageSchema = new mongoose.Schema(
   {
@@ -21,6 +22,8 @@ const messageSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+messageSchema.plugin(toJSON);
 
 const Message = mongoose.model("Message", messageSchema);
 module.exports = Message;

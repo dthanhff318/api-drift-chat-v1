@@ -35,8 +35,6 @@ const friendServices = {
       { userId: id },
       {
         $push: dataFriend,
-      },
-      {
         $pull: dataAccept,
       },
       { new: true }

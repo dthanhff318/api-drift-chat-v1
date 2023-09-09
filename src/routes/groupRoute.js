@@ -1,10 +1,10 @@
-const express = require("express")
+const express = require("express");
 
-const {verifyToken} = require("../middlewares")
-const groupController = require("../controllers/groupController")
+const { verifyToken } = require("../middlewares");
+const groupController = require("../controllers/groupController");
 
-const groupRoute = express.Router()
+const groupRoute = express.Router();
 
-groupRoute.get("/",verifyToken,groupController.getAllGroup)
+groupRoute.get("/", verifyToken, groupController.getAllGroup);
 
-module.exports = groupRoute
+module.exports = groupRoute;

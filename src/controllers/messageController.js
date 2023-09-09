@@ -1,35 +1,30 @@
 const Message = require("../models/message.model");
 const { HTTPStatusCode } = require("../constants");
+const messageServices = require("../services/messageServices");
 
 const messageController = {
   sendMessage: async (req, res) => {
     try {
-      const senderUid = req.infoUser.uid;
+      const { id } = req.infoUser;
       const { groupId, content } = req.body;
-      const newMess = new Message({
-        senderId: senderUid,
-        group: groupId,
-        content: content,
-      });
-      const resMess = await newMess.save();
-      console.log({ resMess });
-      console.log("hihi", resMess.content);
-      return res.status(HTTPStatusCode.OK).json(resMess);
+      const sendMess = await messageServices.createMessage(
+        id,
+        groupId,
+        content
+      );
+      return res.status(HTTPStatusCode.OK).json(sendMess);
     } catch (err) {
       return res.status(HTTPStatusCode.BAD_REQUEST).json(err);
     }
   },
-  getMessage: async (req, res) => {
+  getMessages: async (req, res) => {
     try {
+      const { id } = req.infoUser;
       const { page, limit, groupId } = req.query;
-
       const pageNumber = parseInt(page, 10);
       const limitNumber = parseInt(limit, 10);
 
-      const listMessage = await Message.find({ group: groupId })
-        .sort({ createdAt: -1 })
-        .skip((pageNumber - 1) * limitNumber)
-        .limit(limitNumber);
+      const listMessage = await messageServices.getMessages(groupId);
       return res.status(HTTPStatusCode.OK).json(listMessage);
     } catch (err) {
       return res.status(HTTPStatusCode.BAD_REQUEST).json(err);

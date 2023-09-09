@@ -76,25 +76,22 @@ const friendController = {
           .status(HTTPStatusCode.BAD_REQUEST)
           .json("Can not send request to yourself");
       }
-      const dataFriendSender = await friendServices.getDataFriendUser(id);
-      const dataFriendReceive = await friendServices.getDataFriendUser(
-        friendId
-      );
+      const dataFriendReceive = await friendServices.getDataFriendUser(id);
+      const dataFriendSender = await friendServices.getDataFriendUser(friendId);
       if (!dataFriendReceive || !dataFriendSender) {
         return res
           .status(HTTPStatusCode.NOT_FOUND)
           .json("Not found data friend");
       }
-      // Check if user have sent request yet
-      // if (dataFriendReceive.listAccept.includes(id)) {
-      //   await friendServices.cancelRequestAddFriend(id, {
-      //     listRequest: friendId,
-      //   });
-      //   await friendServices.cancelRequestAddFriend(friendId, {
-      //     listAccept: id,
-      //   });
-      //   return res.status(HTTPStatusCode.OK).json("Cancel request success");
-      // }
+      // Check if 2 people have added friend
+      if (
+        dataFriendReceive.listFriend.find((e) => e.id === friendId) ||
+        dataFriendSender.listFriend.find((e) => e.id === id)
+      ) {
+        return res
+          .status(HTTPStatusCode.BAD_REQUEST)
+          .json("You are already friends");
+      }
       await friendServices.acceptFriendData(
         id,
         { listAccept: friendId },

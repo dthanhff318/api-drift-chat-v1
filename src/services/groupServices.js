@@ -1,5 +1,3 @@
-const Friend = require("../models/friends.model");
-const User = require("../models/users.model");
 const { HTTPStatusCode } = require("../constants");
 const Group = require("../models/groups.model");
 
@@ -13,6 +11,14 @@ const groupServices = {
     });
     const newGroupChat = await objGroup.save();
     return newGroupChat;
+  },
+  getGroups: async (id, q = "") => {
+    const groups = await Group.find({ members: { $in: [id] } }).populate({
+      path: "members",
+      model: "User",
+      select: "displayName photoUrl lastActive uid ",
+    });
+    return groups;
   },
 };
 
