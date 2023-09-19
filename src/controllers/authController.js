@@ -51,7 +51,7 @@ const authControllers = {
         refreshToken,
       });
     } catch (err) {
-      console.log(err);
+      return res.status(HTTPStatusCode.FORBIDDEN).json();
     }
   },
   getCurrentUser: async (req, res) => {
@@ -60,7 +60,7 @@ const authControllers = {
       const user = await authServices.getUserById(id);
       return res.status(HTTPStatusCode.OK).json(user);
     } catch (err) {
-      console.log(err);
+      return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
     }
   },
 };

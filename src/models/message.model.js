@@ -24,6 +24,7 @@ const messageSchema = new mongoose.Schema(
 );
 
 messageSchema.plugin(toJSON);
+messageSchema.plugin(paginate);
 
 const Message = mongoose.model("Message", messageSchema);
 module.exports = Message;

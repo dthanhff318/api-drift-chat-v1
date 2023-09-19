@@ -10,12 +10,17 @@ const messageServices = {
     const newMessage = await dataMess.save();
     return newMessage;
   },
-  getMessages: async (group) => {
-    const listMessage = await Message.find({ group });
-    // .sort({ createdAt: -1 })
-    //     .skip((pageNumber - 1) * limitNumber)
-    //     .limit(limitNumber);
+  getMessages: async (filter, options) => {
+    const listMessage = await Message.paginate(filter, {
+      ...options,
+    });
     return listMessage;
+  },
+  getNewestMessage: async (idGroup) => {
+    const newestMessage = await Message.findOne({
+      group: idGroup,
+    }).sort({ createdAt: -1 });
+    return newestMessage;
   },
 };
 

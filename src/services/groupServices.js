@@ -1,5 +1,6 @@
 const { HTTPStatusCode } = require("../constants");
 const Group = require("../models/groups.model");
+const messageServices = require("./messageServices");
 
 const groupServices = {
   createGroup: async (members, name = "", admins = "", isGroup = false) => {
@@ -18,7 +19,13 @@ const groupServices = {
       model: "User",
       select: "displayName photoUrl lastActive uid ",
     });
-    return groups;
+    const extraDataGroups = await Promise.all(
+      groups.map(async (e) => {
+        const newestMess = await messageServices.getNewestMessage(e.id);
+        return { ...e._doc, id: e.id, newestMess };
+      })
+    );
+    return extraDataGroups;
   },
 };
 

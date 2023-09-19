@@ -21,7 +21,6 @@ app.use(express.json());
 app.use(cookieParser());
 // app.use(bodyParser.urlencoded({ extended: false }));
 
-// parse application/json
 app.use(bodyParser.json());
 
 connect();
@@ -40,24 +39,19 @@ io.on("connection", (socket) => {
     console.log(`${socket.id} join room ${roomId}`);
   });
 
+  socket.on("sendMessage", (data) => {
+    console.log(data);
+    // socket.broadcast.to(data.roomId).emit("sendMessage", data);
+  });
+
   socket.on("leftRoom", (roomId) => {
     socket.leave(roomId);
     console.log(`${socket.id} leave room ${roomId}`);
   });
 
-  socket.on("sendMess", (data) => {
-    socket.broadcast.to(data.roomId).emit("sendMess", data);
-  });
-
-  socket.on("disconnect", () => {
-    // console.log("user disconnected");
-    // disconectTimeout = setTimeout(() => {
-    //   console.log("User disconect the server");
-    // }, 3000);
-  });
+  socket.on("disconnect", () => {});
 
   socket.on("connect", () => {
     console.log("One user reconnect");
-    // clearTimeout(disconectTimeout);
   });
 });
