@@ -1,6 +1,7 @@
 const { HTTPStatusCode } = require("../constants");
 const Group = require("../models/groups.model");
 const messageServices = require("./messageServices");
+const moment = require("moment");
 
 const groupServices = {
   createGroup: async (members, name = "", admins = "", isGroup = false) => {
@@ -25,7 +26,12 @@ const groupServices = {
         return { ...e._doc, id: e.id, newestMess };
       })
     );
-    return extraDataGroups;
+    const sortedGroups = extraDataGroups.sort(
+      (a, b) =>
+        moment(b.newestMess?.createdAt ?? "1970-01-01T00:00:00.000Z") -
+        moment(a.newestMess?.createdAt ?? "1970-01-01T00:00:00.000Z")
+    );
+    return sortedGroups;
   },
 };
 
