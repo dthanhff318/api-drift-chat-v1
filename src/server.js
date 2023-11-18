@@ -26,13 +26,16 @@ app.use(bodyParser.json());
 connect();
 
 app.use("/v1", apiV1);
-
+app.get("/", () => {
+  console.log(1);
+});
 httpServer.listen(process.env.PORT, process.env.BASE_URL, () => {
   console.log("Server is running in Port 4000");
 });
 
 io.on("connection", (socket) => {
   let disconectTimeout;
+  console.log(socket.rooms);
 
   socket.on("joinRoom", (roomId) => {
     socket.join(roomId);
@@ -40,8 +43,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", (data) => {
-    console.log(data);
     // socket.broadcast.to(data.roomId).emit("sendMessage", data);
+    socket.broadcast.emit("sendMessage", data);
   });
 
   socket.on("leftRoom", (roomId) => {
