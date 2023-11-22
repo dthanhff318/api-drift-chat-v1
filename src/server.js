@@ -6,8 +6,13 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const connect = require("./mongoDbConfig/mongoConfig");
 const apiV1 = require("./routes");
+const logger = require("./config/logger");
+const ApiError = require("./utilities/ApiError");
+const httpStatus = require("http-status");
+const { errorConverter, errorHandler } = require("./middlewares/error");
 
 require("dotenv").config();
+
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -19,18 +24,29 @@ const io = new Server(httpServer, {
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
-// app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
 connect();
 
-app.use("/v1", apiV1);
 app.get("/", () => {
   console.log(1);
 });
+app.use("/v1", apiV1);
+
+// Send 404 error for unknon api
+app.use((req, res, next) => {
+  next(new ApiError(httpStatus.NOT_FOUND, ERR_MESSAGE.NOT_FOUND));
+});
+
+// convert error to ApiError, if needed
+app.use(errorConverter);
+
+// handle error
+app.use(errorHandler);
+
 httpServer.listen(process.env.PORT, process.env.BASE_URL, () => {
-  console.log("Server is running in Port 4000");
+  logger.info(`Server is running in Port ${process.env.PORT}`);
 });
 
 io.on("connection", (socket) => {

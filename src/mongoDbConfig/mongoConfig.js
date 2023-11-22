@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const logger = require("../config/logger");
 
 const connect = async () => {
   await mongoose
@@ -10,7 +11,7 @@ const connect = async () => {
         wtimeoutMS: 10000,
       }
     )
-    .then(() => console.log("Connect DB success"))
+    .then(() => logger.info("Connect DB success"))
     .catch((e) => console.log(e))
     .finally(() => {});
 };
