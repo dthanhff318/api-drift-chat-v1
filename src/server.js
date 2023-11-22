@@ -29,8 +29,8 @@ app.use(bodyParser.json());
 
 connect();
 
-app.get("/", () => {
-  console.log(1);
+app.get("/", (req, res) => {
+  return res.status(httpStatus.OK).json("Welcome");
 });
 app.use("/v1", apiV1);
 
