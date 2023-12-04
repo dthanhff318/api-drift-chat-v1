@@ -51,21 +51,22 @@ httpServer.listen(process.env.PORT, process.env.BASE_URL, () => {
 
 io.on("connection", (socket) => {
   let disconectTimeout;
-  console.log(socket.rooms);
-
+  // console.log(socket.rooms);
   socket.on("joinRoom", (roomId) => {
     socket.join(roomId);
-    console.log(`${socket.id} join room ${roomId}`);
   });
 
+  // socket.on("sendMessage", (data) => {
+  //   const { room } = data;
+  //   io.to(room).emit("sendMessage", data);
+  // });
+
   socket.on("sendMessage", (data) => {
-    // socket.broadcast.to(data.roomId).emit("sendMessage", data);
     socket.broadcast.emit("sendMessage", data);
   });
 
   socket.on("leftRoom", (roomId) => {
-    socket.leave(roomId);
-    console.log(`${socket.id} leave room ${roomId}`);
+    // socket.leave(roomId);
   });
 
   socket.on("disconnect", () => {});

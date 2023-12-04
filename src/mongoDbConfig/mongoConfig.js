@@ -12,7 +12,7 @@ const connect = async () => {
       }
     )
     .then(() => logger.info("Connect DB success"))
-    .catch((e) => console.log(e))
+    .catch((e) => logger.error(e))
     .finally(() => {});
 };
 
