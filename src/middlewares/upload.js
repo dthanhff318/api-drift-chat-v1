@@ -8,6 +8,7 @@ const uploadFormidable = (req, res, next) => {
       return;
     }
     const { image } = files;
+    console.log(fields);
     req.file = image[0];
     return next();
   });

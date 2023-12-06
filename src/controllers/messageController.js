@@ -36,7 +36,7 @@ const messageController = {
       };
 
       const file = req.file;
-      const result = await cloudinary.uploader.upload(file.filePath, options);
+      const result = await cloudinary.uploader.upload(file.filepath, options);
       return res.status(HTTPStatusCode.OK).json(result);
     } catch (err) {
       console.log(err);
