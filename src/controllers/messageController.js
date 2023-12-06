@@ -1,7 +1,7 @@
-const Message = require("../models/message.model");
 const { HTTPStatusCode } = require("../constants");
 const messageServices = require("../services/messageServices");
 const pick = require("../utilities/pick");
+const cloudinary = require("../config/cloudinary");
 
 const messageController = {
   sendMessage: async (req, res) => {
@@ -24,6 +24,22 @@ const messageController = {
       const listMessage = await messageServices.getMessages(filter, options);
       return res.status(HTTPStatusCode.OK).json(listMessage);
     } catch (err) {
+      return res.status(HTTPStatusCode.BAD_REQUEST).json(err);
+    }
+  },
+  uploadMessImage: async (req, res) => {
+    try {
+      const options = {
+        use_filename: true,
+        unique_filename: false,
+        overwrite: true,
+      };
+
+      const file = req.file;
+      const result = await cloudinary.uploader.upload(file.filePath, options);
+      return res.status(HTTPStatusCode.OK).json(result);
+    } catch (err) {
+      console.log(err);
       return res.status(HTTPStatusCode.BAD_REQUEST).json(err);
     }
   },

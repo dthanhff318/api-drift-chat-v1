@@ -1,15 +1,11 @@
-const {
-  genAccessToken,
-  genRefreshToken,
-  decodeToken,
-} = require("../utilities/tokenHelper");
-const User = require("../models/users.model");
-const { HTTPStatusCode } = require("../constants");
+const httpStatus = require("http-status");
 const { userServices } = require("../services/userServices");
+
 const userController = {
-  getAllUser: async (req, res) => {
+  getUser: async (req, res) => {
     try {
-      const listUser = await userServices.getAllUser()
+      const listUser = await userServices.getAllUser();
+      return res.httpStatus(httpStatus.OK).json(listUser);
     } catch (err) {
       console.log(err);
     }

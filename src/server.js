@@ -36,7 +36,7 @@ app.use("/v1", apiV1);
 
 // Send 404 error for unknon api
 app.use((req, res, next) => {
-  next(new ApiError(httpStatus.NOT_FOUND, ERR_MESSAGE.NOT_FOUND));
+  next(new ApiError(httpStatus.NOT_FOUND, "Not found"));
 });
 
 // convert error to ApiError, if needed
