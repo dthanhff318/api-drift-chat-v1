@@ -24,6 +24,10 @@ const groupSchema = new mongoose.Schema({
     require: true,
     default: false,
   },
+  unread: {
+    type: Number,
+    default: 0,
+  },
 });
 
 groupSchema.plugin(toJSON);

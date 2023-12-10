@@ -1,12 +1,8 @@
 const Message = require("../models/message.model");
 
 const messageServices = {
-  createMessage: async (senderId, group, content) => {
-    const dataMess = new Message({
-      senderId,
-      group,
-      content,
-    });
+  createMessage: async (messBody) => {
+    const dataMess = new Message(messBody);
     const newMessage = await dataMess.save();
     return newMessage;
   },

@@ -33,6 +33,13 @@ const groupServices = {
     );
     return sortedGroups;
   },
+  updateGroup: async (id, updateBody) => {
+    const update = await Group.findByIdAndUpdate(id, updateBody, {
+      new: true,
+    });
+    console.log(id);
+    return update;
+  },
 };
 
 module.exports = groupServices;

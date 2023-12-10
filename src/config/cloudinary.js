@@ -6,4 +6,13 @@ cloudinary.config({
   api_secret: "Y5ZHQRN3TWLign1aoIbujCzABUE",
 });
 
-module.exports = cloudinary;
+const defaulOptions = {
+  use_filename: true,
+  unique_filename: false,
+  overwrite: true,
+};
+
+module.exports = {
+  cloudinary,
+  defaulOptions,
+};

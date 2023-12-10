@@ -4,13 +4,13 @@ const messageRoute = express.Router();
 const { verifyToken } = require("../middlewares");
 const { uploadFormidable } = require("../middlewares/upload");
 
-messageRoute.post("/send", verifyToken, messageController.sendMessage);
-messageRoute.patch(
-  "/send/upload",
-  //   verifyToken,
-  uploadFormidable,
-  messageController.uploadMessImage
-);
 messageRoute.get("/", verifyToken, messageController.getMessages);
+messageRoute.post("/send", verifyToken, messageController.sendMessage);
+messageRoute.post(
+  "/send-with-image",
+  verifyToken,
+  uploadFormidable,
+  messageController.sendMessageWithImage
+);
 
 module.exports = messageRoute;

@@ -1,5 +1,5 @@
 const formidable = require("formidable");
-
+const { convertBodyFormidable } = require("../utilities/func");
 const uploadFormidable = (req, res, next) => {
   const form = new formidable.IncomingForm();
   form.parse(req, (err, fields, files) => {
@@ -8,8 +8,8 @@ const uploadFormidable = (req, res, next) => {
       return;
     }
     const { image } = files;
-    console.log(fields);
     req.file = image[0];
+    req.dataUpload = convertBodyFormidable(fields);
     return next();
   });
 };
