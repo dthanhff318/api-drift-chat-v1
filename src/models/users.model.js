@@ -33,6 +33,14 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  coin: {
+    type: Number,
+    default: 0,
+  },
+  introduction: {
+    type: String,
+    default: "Hi",
+  },
 });
 
 // Tell Mongoose to include virtual properties when converting documents to JSON
