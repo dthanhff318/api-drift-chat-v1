@@ -7,10 +7,10 @@ const messageController = {
     try {
       const { id } = req.infoUser;
       const { group, content } = req.body;
+      console.log(req.body);
       const sendMess = await messageServices.createMessage({
+        ...req.body,
         senderId: id,
-        group,
-        content,
       });
       return res.status(HTTPStatusCode.OK).json(sendMess);
     } catch (err) {
@@ -21,7 +21,6 @@ const messageController = {
   sendMessageWithImage: async (req, res) => {
     try {
       const { id } = req.infoUser;
-      const { group, content } = req.body;
       const file = req.file;
       const rawData = req.dataUpload;
       const result = await uploadWithCloudinary(file.filepath);
@@ -45,6 +44,8 @@ const messageController = {
       const listMessage = await messageServices.getMessages(filter, options);
       return res.status(HTTPStatusCode.OK).json(listMessage);
     } catch (err) {
+      console.log(err);
+
       return res.status(HTTPStatusCode.BAD_REQUEST).json(err);
     }
   },

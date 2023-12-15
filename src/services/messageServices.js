@@ -9,6 +9,7 @@ const messageServices = {
   getMessages: async (filter, options) => {
     const listMessage = await Message.paginate(filter, {
       ...options,
+      populate: 'replyMessage',
     });
     return listMessage;
   },
