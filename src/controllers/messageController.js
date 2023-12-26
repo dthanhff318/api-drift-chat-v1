@@ -6,8 +6,6 @@ const messageController = {
   sendMessage: async (req, res) => {
     try {
       const { id } = req.infoUser;
-      const { group, content } = req.body;
-      console.log(req.body);
       const sendMess = await messageServices.createMessage({
         ...req.body,
         senderId: id,

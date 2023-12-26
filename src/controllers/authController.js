@@ -7,6 +7,7 @@ const User = require("../models/users.model");
 const { HTTPStatusCode } = require("../constants");
 const Friend = require("../models/friends.model");
 const authServices = require("../services/authServices");
+const { nanoid } = require("nanoid");
 
 const authControllers = {
   loginWithFireBase: async (req, res) => {
@@ -24,7 +25,8 @@ const authControllers = {
       };
       return res.status(HTTPStatusCode.OK).json(dataResponse);
     } else {
-      const userObj = new User(req.body);
+      const shortId = nanoid(6);
+      const userObj = new User({ ...req.body, inviteId: shortId });
       const user = await userObj.save();
       const friendObj = new Friend({ userId: user.id });
       friendObj.save();
