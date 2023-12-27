@@ -7,6 +7,9 @@ const HTTPStatusCode = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
+const DEFAULT_TIME_DELAY = 2000;
+
 module.exports = {
   HTTPStatusCode,
+  DEFAULT_TIME_DELAY,
 };

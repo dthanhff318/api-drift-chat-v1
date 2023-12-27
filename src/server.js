@@ -10,7 +10,7 @@ const logger = require("./config/logger");
 const ApiError = require("./utilities/ApiError");
 const httpStatus = require("http-status");
 const { errorConverter, errorHandler } = require("./middlewares/error");
-
+const { DEFAULT_TIME_DELAY } = require("./constants/index");
 require("dotenv").config();
 
 const app = express();
@@ -60,13 +60,14 @@ io.on("connection", (socket) => {
   //   const { room } = data;
   //   io.to(room).emit("sendMessage", data);
   // });
+  socket.on("userLogin", (user) => {
+    setTimeout(() => {
+      socket.broadcast.emit("userLogin", user);
+    }, DEFAULT_TIME_DELAY);
+  });
 
   socket.on("sendMessage", (data) => {
     socket.broadcast.emit("sendMessage", data);
-  });
-
-  socket.on("leftRoom", (roomId) => {
-    // socket.leave(roomId);
   });
 
   socket.on("disconnect", () => {});
