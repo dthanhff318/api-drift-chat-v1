@@ -5,7 +5,23 @@ const servicesController = {
   getUsers: async (req, res) => {
     try {
       const senderUid = req.infoUser.uid;
-      const listUsers = await User.find({ uid: { $ne: senderUid } });
+      const { q = "" } = req.query;
+      const listUsers = await User.find({
+        $and: [
+          {
+            $or: [
+              {
+                displayName: { $regex: q, $options: "i" },
+              },
+              { inviteId: { $regex: q, $options: "i" } },
+            ],
+          },
+          {
+            uid: { $ne: senderUid },
+          },
+        ],
+      });
+
       return res.status(HTTPStatusCode.OK).json(listUsers);
     } catch (err) {
       console.log(err);
@@ -16,7 +32,6 @@ const servicesController = {
     if (!query) {
       return res.status(400).json({ error: "Missing query parameter q" });
     }
-    // Sử dụng phương thức find của mongoose để tìm kiếm người dùng
     const users = await User.find({
       displayName: { $regex: query, $options: "i" },
     });
