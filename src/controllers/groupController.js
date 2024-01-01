@@ -31,6 +31,22 @@ const groupController = {
       return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
     }
   },
+  createGroup: async (req, res) => {
+    try {
+      const { id } = req.infoUser;
+      const { name, membersId } = req.body;
+      const group = await groupServices.createGroup({
+        members: [...membersId, id],
+        name,
+        admins: [id],
+        isGroup: true,
+      });
+      return res.status(HTTPStatusCode.OK).json(group);
+    } catch (err) {
+      console.log(err);
+      return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
+    }
+  },
 };
 
 module.exports = groupController;

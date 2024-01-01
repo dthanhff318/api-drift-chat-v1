@@ -4,7 +4,8 @@ const messageServices = require("./messageServices");
 const moment = require("moment");
 
 const groupServices = {
-  createGroup: async (members, name = "", admins = "", isGroup = false) => {
+  createGroup: async (data) => {
+    const { members, name = "", admins = "", isGroup = false } = data;
     const objGroup = new Group({
       name,
       members,
