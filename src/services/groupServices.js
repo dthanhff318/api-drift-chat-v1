@@ -41,6 +41,10 @@ const groupServices = {
     console.log(id);
     return update;
   },
+  getDetailGroup: async (id) => {
+    const group = await Group.findById(id);
+    return group;
+  },
 };
 
 module.exports = groupServices;

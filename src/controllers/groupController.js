@@ -47,6 +47,11 @@ const groupController = {
       return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
     }
   },
+  getDetailGroup: async (req, res) => {
+    try {
+      const group = await groupServices.getDetailGroup();
+    } catch (err) {}
+  },
 };
 
 module.exports = groupController;
