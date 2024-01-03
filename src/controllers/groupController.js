@@ -49,8 +49,12 @@ const groupController = {
   },
   getDetailGroup: async (req, res) => {
     try {
-      const group = await groupServices.getDetailGroup();
-    } catch (err) {}
+      const { id } = req.params;
+      const group = await groupServices.getDetailGroup(id);
+      return res.status(HTTPStatusCode.OK).json(group);
+    } catch (err) {
+      return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
+    }
   },
 };
 

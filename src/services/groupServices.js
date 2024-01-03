@@ -38,11 +38,14 @@ const groupServices = {
     const update = await Group.findByIdAndUpdate(id, updateBody, {
       new: true,
     });
-    console.log(id);
     return update;
   },
   getDetailGroup: async (id) => {
-    const group = await Group.findById(id);
+    const group = await Group.findById(id).populate({
+      path: "members admins",
+      model: "User",
+      select: "displayName photoUrl lastActive uid ",
+    });
     return group;
   },
 };
