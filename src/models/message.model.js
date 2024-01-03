@@ -26,6 +26,10 @@ const messageSchema = new mongoose.Schema(
       default: null,
       ref: "Message",
     },
+    isDelete: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

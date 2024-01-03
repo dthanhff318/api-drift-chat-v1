@@ -70,6 +70,10 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("sendMessage", data);
   });
 
+  socket.on("deleteMessage", (data) => {
+    socket.broadcast.emit("deleteMessage", data);
+  });
+
   socket.on("disconnect", () => {});
 
   socket.on("connect", () => {

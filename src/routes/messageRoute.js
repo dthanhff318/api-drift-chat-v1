@@ -12,5 +12,6 @@ messageRoute.post(
   uploadFormidable,
   messageController.sendMessageWithImage
 );
+messageRoute.patch("/delete/:id", verifyToken, messageController.deleteMessage);
 
 module.exports = messageRoute;

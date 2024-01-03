@@ -9,7 +9,7 @@ const messageServices = {
   getMessages: async (filter, options) => {
     const listMessage = await Message.paginate(filter, {
       ...options,
-      populate: 'replyMessage',
+      populate: "replyMessage",
     });
     return listMessage;
   },
@@ -18,6 +18,12 @@ const messageServices = {
       group: idGroup,
     }).sort({ createdAt: -1 });
     return newestMessage;
+  },
+  updateMessage: async (id, data) => {
+    const messUpdate = await Message.findByIdAndUpdate(id, data, {
+      new: true,
+    });
+    return messUpdate;
   },
 };
 

@@ -43,7 +43,17 @@ const messageController = {
       return res.status(HTTPStatusCode.OK).json(listMessage);
     } catch (err) {
       console.log(err);
+      return res.status(HTTPStatusCode.BAD_REQUEST).json(err);
+    }
+  },
 
+  deleteMessage: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const dataUpdate = req.body;
+      const message = await messageServices.updateMessage(id, dataUpdate);
+      return res.status(HTTPStatusCode.OK).json(message);
+    } catch (err) {
       return res.status(HTTPStatusCode.BAD_REQUEST).json(err);
     }
   },
