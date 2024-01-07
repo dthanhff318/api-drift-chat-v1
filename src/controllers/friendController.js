@@ -102,7 +102,10 @@ const friendController = {
         { listRequest: id },
         { listFriend: id }
       );
-      await groupServices.createGroup([id, friendId]);
+      await groupServices.createGroup({
+        admins: [id, friendId],
+        members: [id, friendId],
+      });
       return res.status(HTTPStatusCode.OK).json("Accept friend success");
     } catch (err) {
       console.log(err);
