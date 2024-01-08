@@ -32,5 +32,13 @@ const groupSchema = new mongoose.Schema({
 
 groupSchema.plugin(toJSON);
 
+groupSchema.pre("save", async function (next) {
+  const group = this;
+  if (user.isModified("members")) {
+    user.password = await bcrypt.hash(user.password, salt);
+  }
+  next();
+});
+
 const Group = mongoose.model("Group", groupSchema);
 module.exports = Group;
