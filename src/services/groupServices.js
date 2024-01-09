@@ -6,11 +6,17 @@ const moment = require("moment");
 const groupServices = {
   createGroup: async (data) => {
     const { members, name = "", admins = "", isGroup = false } = data;
+    const genDefaultSetting = members.map((e) => ({
+      user: e,
+      nickname: "",
+      theme: null,
+    }));
     const objGroup = new Group({
       name,
       members,
       admins,
       isGroup,
+      setting: genDefaultSetting,
     });
     const newGroupChat = await objGroup.save();
     return newGroupChat;
@@ -47,6 +53,15 @@ const groupServices = {
       select: "displayName photoUrl lastActive uid ",
     });
     return group;
+  },
+  updateNicknameInGroup: async (data) => {
+    const { id, user, nickname } = data;
+    const group = await Group.findById(id).lean();
+    const { setting } = group;
+    const updateSetting = setting.map((s) =>
+      user === s.user ? { ...s, nickname } : s
+    );
+    await Group.findByIdAndUpdate(id, { setting: updateSetting });
   },
 };
 

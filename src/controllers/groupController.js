@@ -1,6 +1,5 @@
 const groupServices = require("../services/groupServices");
 const { HTTPStatusCode } = require("../constants/index");
-const Group = require("../models/groups.model");
 
 const groupController = {
   getAllGroup: async (req, res) => {
@@ -53,6 +52,21 @@ const groupController = {
       const group = await groupServices.getDetailGroup(id);
       return res.status(HTTPStatusCode.OK).json(group);
     } catch (err) {
+      return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
+    }
+  },
+  changeNickname: async (req, res) => {
+    try {
+      const { userId, nickname } = req.body;
+      const { groupId } = req.params;
+      await groupServices.updateNicknameInGroup({
+        id: groupId,
+        user: userId,
+        nickname,
+      });
+      return res.status(HTTPStatusCode.OK).json(null);
+    } catch (err) {
+      console.log(err);
       return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
     }
   },
