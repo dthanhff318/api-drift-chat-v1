@@ -1,6 +1,6 @@
 const express = require("express");
-
 const { verifyToken } = require("../middlewares");
+const { uploadFormidable } = require("../middlewares/upload");
 const groupController = require("../controllers/groupController");
 
 const groupRoute = express.Router();
@@ -13,6 +13,17 @@ groupRoute.patch(
   "/nick-name/:groupId",
   verifyToken,
   groupController.changeNickname
+);
+groupRoute.post(
+  "/remove-member/:groupId",
+  verifyToken,
+  groupController.removeMember
+);
+groupRoute.post(
+  "/change-photo/:groupId",
+  verifyToken,
+  uploadFormidable,
+  groupController.changePhoto
 );
 
 module.exports = groupRoute;

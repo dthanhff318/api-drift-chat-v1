@@ -58,10 +58,24 @@ const groupServices = {
     const { id, user, nickname } = data;
     const group = await Group.findById(id).lean();
     const { setting } = group;
+    console.log(group);
     const updateSetting = setting.map((s) =>
       user === s.user ? { ...s, nickname } : s
     );
     await Group.findByIdAndUpdate(id, { setting: updateSetting });
+  },
+  removeMemberInGroup: async (data) => {
+    const { groupId, member } = data;
+    const removeUser = await Group.findByIdAndUpdate(
+      groupId,
+      {
+        $pull: { members: member, setting: { user: member } },
+      },
+      {
+        new: true,
+      }
+    );
+    return removeUser;
   },
 };
 
