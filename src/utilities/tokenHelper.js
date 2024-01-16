@@ -1,4 +1,5 @@
-var jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
+const { jwtVar } = require("../config/jwt");
 require("dotenv").config();
 
 const genAccessToken = (id) => {
@@ -13,11 +14,8 @@ const genRefreshToken = (id) => {
   });
 };
 
-const decodeToken = async (token, isAccess = true) => {
-  return jwt.verify(
-    token,
-    isAccess ? process.env.ACCESSTOKEN_KEY : process.env.REFRESHTOKEN_KEY
-  );
+const decodeToken = async (token) => {
+  return jwt.verify(token, jwtVar.secretKey);
 };
 
 module.exports = {

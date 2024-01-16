@@ -5,6 +5,7 @@ const verifyToken = async (req, res, next) => {
   try {
     const accessToken = req.headers.authorization.split(" ")[1];
     const infoUser = await decodeToken(accessToken);
+    console.log(infoUser);
     req.infoUser = infoUser;
     next();
   } catch (err) {
