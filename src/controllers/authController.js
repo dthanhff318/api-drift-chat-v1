@@ -47,12 +47,14 @@ const authControllers = {
   refreshToken: async (req, res) => {
     try {
       const refreshTk = req.body.refresh;
-      const decodeTokenValue = await decodeToken(refreshTk, false);
-      const accessToken = genAccessToken(decodeTokenValue.uid);
-      const refreshToken = genRefreshToken(decodeTokenValue.uid);
+      const decodeTokenValue = await decodeToken(refreshTk);
+      console.log(decodeTokenValue);
+      const { access, refresh } = await tokenSevices.generateAuthTokens(
+        decodeTokenValue
+      );
       return res.status(HTTPStatusCode.OK).json({
-        accessToken,
-        refreshToken,
+        accessToken: access,
+        refreshToken: refresh,
       });
     } catch (err) {
       return res.status(HTTPStatusCode.FORBIDDEN).json();
