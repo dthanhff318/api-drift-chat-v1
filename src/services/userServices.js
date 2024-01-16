@@ -8,6 +8,13 @@ const userServices = {
     const listUser = await User.find({ id: { $ne: id } });
     return listUser;
   },
+  updateUser: async (data) => {
+    const { id, dataUpdate } = data;
+    const user = await User.findByIdAndUpdate(id, dataUpdate, {
+      new: true,
+    });
+    return user;
+  },
 };
 
 module.exports = userServices;
