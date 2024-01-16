@@ -5,22 +5,25 @@ const {
 } = require("../utilities/tokenHelper");
 const User = require("../models/users.model");
 const { HTTPStatusCode } = require("../constants");
+const httpStatus = require("http-status");
 const Friend = require("../models/friends.model");
 const authServices = require("../services/authServices");
 const { nanoid } = require("nanoid");
+const tokenSevices = require("../services/token.services");
 
 const authControllers = {
   loginWithFireBase: async (req, res) => {
     const { uid } = req.body;
     const findUser = await User.findOne({ uid });
     if (findUser) {
-      const accessToken = genAccessToken(findUser.id);
-      const refreshToken = genRefreshToken(findUser.id);
+      const { access, refresh } = await tokenSevices.generateAuthTokens(
+        findUser
+      );
       const dataResponse = {
         user: findUser,
         token: {
-          accessToken,
-          refreshToken,
+          accessToken: access,
+          refreshToken: refresh,
         },
       };
       return res.status(HTTPStatusCode.OK).json(dataResponse);
@@ -30,13 +33,12 @@ const authControllers = {
       const user = await userObj.save();
       const friendObj = new Friend({ userId: user.id });
       friendObj.save();
-      const accessToken = genAccessToken(user.id);
-      const refreshToken = genRefreshToken(user.id);
+      const { access, refresh } = await tokenSevices.generateAuthTokens(user);
       const dataResponse = {
         user,
         token: {
-          accessToken,
-          refreshToken,
+          accessToken: access,
+          refreshToken: refresh,
         },
       };
       return res.status(HTTPStatusCode.OK).json(dataResponse);
@@ -63,6 +65,16 @@ const authControllers = {
       return res.status(HTTPStatusCode.OK).json(user);
     } catch (err) {
       return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
+    }
+  },
+  logout: async (req, res) => {
+    try {
+      const { id } = req.infoUser;
+      const { refreshToken } = req.body;
+      await authServices.logout({ id, refreshToken });
+      res.status(httpStatus.NO_CONTENT).send();
+    } catch (err) {
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
   },
 };
