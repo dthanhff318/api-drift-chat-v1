@@ -48,18 +48,22 @@ const friendController = {
           .json("Not found data friend");
       }
       // Check if user have sent request yet
-      if (dataFriendReceive.listAccept.includes(id)) {
-        await friendServices.cancelRequestAddFriend(id, {
+      if (
+        dataFriendReceive.listAccept.some((user) => user?._id.toString() === id)
+      ) {
+        const newListFriends = await friendServices.cancelRequestAddFriend(id, {
           listRequest: friendId,
         });
-        await friendServices.cancelRequestAddFriend(friendId, {
+        const test = await friendServices.cancelRequestAddFriend(friendId, {
           listAccept: id,
         });
-        return res.status(HTTPStatusCode.OK).json("Cancel request success");
+        return res.status(HTTPStatusCode.OK).json(newListFriends);
       }
-      await friendServices.addFriendData(id, { listRequest: friendId });
+      const newListFriends = await friendServices.addFriendData(id, {
+        listRequest: friendId,
+      });
       await friendServices.addFriendData(friendId, { listAccept: id });
-      return res.status(HTTPStatusCode.OK).json("Send request success");
+      return res.status(HTTPStatusCode.OK).json(newListFriends);
     } catch (err) {
       console.log(err);
       return res
@@ -92,7 +96,7 @@ const friendController = {
           .status(HTTPStatusCode.BAD_REQUEST)
           .json("You are already friends");
       }
-      await friendServices.acceptFriendData(
+      const newListFriend = await friendServices.acceptFriendData(
         id,
         { listAccept: friendId },
         { listFriend: friendId }
@@ -106,7 +110,7 @@ const friendController = {
         admins: [id, friendId],
         members: [id, friendId],
       });
-      return res.status(HTTPStatusCode.OK).json("Accept friend success");
+      return res.status(HTTPStatusCode.OK).json(newListFriend);
     } catch (err) {
       console.log(err);
       return res
