@@ -48,7 +48,6 @@ const authControllers = {
     try {
       const refreshTk = req.body.refresh;
       const decodeTokenValue = await decodeToken(refreshTk);
-      console.log(decodeTokenValue);
       const { access, refresh } = await tokenSevices.generateAuthTokens(
         decodeTokenValue
       );

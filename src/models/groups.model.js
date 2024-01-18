@@ -47,9 +47,10 @@ const groupSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
-  themeColor: {
+  theme: {
     type: String,
-    default: "#000000",
+    ref: "Theme",
+    default: "DEFAULT_BLACK",
   },
 
   setting: [settingPerUserSchema],

@@ -52,6 +52,7 @@ const groupServices = {
       model: "User",
       select: "displayName photoUrl lastActive uid ",
     });
+
     return group;
   },
   updateNicknameInGroup: async (data) => {
