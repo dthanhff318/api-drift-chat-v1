@@ -7,5 +7,10 @@ authRoute.post("/login/firebase", authControllers.loginWithFireBase);
 authRoute.post("/refresh", authControllers.refreshToken);
 authRoute.post("/logout", authControllers.logout);
 authRoute.get("/current-user", verifyToken, authControllers.getCurrentUser);
+authRoute.get(
+  "/gen-token-livekit",
+  verifyToken,
+  authControllers.genTokenLivekit
+);
 
 module.exports = authRoute;

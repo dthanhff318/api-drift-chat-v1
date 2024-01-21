@@ -9,9 +9,6 @@ const settingPerUserSchema = new mongoose.Schema({
   },
   nickname: {
     type: String,
-  },
-  theme: {
-    type: String,
     default: null,
   },
 });

@@ -47,11 +47,18 @@ const groupServices = {
     return update;
   },
   getDetailGroup: async (id) => {
-    const group = await Group.findById(id).populate({
-      path: "members admins",
-      model: "User",
-      select: "displayName photoUrl lastActive uid ",
-    });
+    const group = await Group.findById(id)
+      .populate({
+        path: "members admins",
+        model: "User",
+        select: "displayName photoUrl lastActive uid ",
+      })
+      .populate({
+        path: "theme",
+        model: "Theme",
+        // localField: "theme",
+        foreignField: "name",
+      });
 
     return group;
   },
@@ -77,6 +84,25 @@ const groupServices = {
       }
     );
     return removeUser;
+  },
+  addMemberInGroup: async (data) => {
+    const { groupId, members } = data;
+    const genSettingUser = members.map((e) => ({
+      user: e,
+    }));
+    const addUser = await Group.findByIdAndUpdate(
+      groupId,
+      {
+        $push: {
+          members: { $each: members },
+          setting: { $each: genSettingUser },
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    return addUser;
   },
 };
 

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { toJSON, paginate } = require("./plugins");
+const { listTypeMessage, messageTypes } = require("../config/message");
 
 const messageSchema = new mongoose.Schema(
   {
@@ -29,6 +30,11 @@ const messageSchema = new mongoose.Schema(
     isDelete: {
       type: Boolean,
       default: false,
+    },
+    type: {
+      type: String,
+      enum: listTypeMessage,
+      default: messageTypes.USER,
     },
   },
   {

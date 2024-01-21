@@ -19,6 +19,7 @@ groupRoute.post(
   verifyToken,
   groupController.removeMember
 );
+groupRoute.post("/add-member/:groupId", verifyToken, groupController.addMember);
 groupRoute.post(
   "/change-photo/:groupId",
   verifyToken,

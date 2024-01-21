@@ -85,6 +85,20 @@ const groupController = {
       return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
     }
   },
+  addMember: async (req, res) => {
+    try {
+      const { members } = req.body;
+      const { groupId } = req.params;
+      const addMemberGroup = await groupServices.addMemberInGroup({
+        groupId,
+        members,
+      });
+      return res.status(HTTPStatusCode.OK).json(addMemberGroup);
+    } catch (err) {
+      console.log(err);
+      return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
+    }
+  },
   changePhoto: async (req, res) => {
     try {
       const { groupId } = req.params;
@@ -93,7 +107,6 @@ const groupController = {
       const group = await groupServices.updateGroup(groupId, {
         photo: upload.url,
       });
-      console.log(group);
       return res.status(HTTPStatusCode.OK).json(group);
     } catch (err) {
       console.log(err);

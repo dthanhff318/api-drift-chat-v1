@@ -14,6 +14,6 @@ apiV1.use("/services", servicesRoute);
 apiV1.use("/user", userRoute);
 apiV1.use("/message", messageRoute);
 apiV1.use("/groups", groupRoute);
-apiV1.use("/setting", settingRoute);
+apiV1.use("/settings", settingRoute);
 
 module.exports = apiV1;

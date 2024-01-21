@@ -5,9 +5,10 @@ const { tokenTypes } = require("../config/token");
 const jwt = require("jsonwebtoken");
 
 const tokenServices = {
-  generateToken: (userId, expires, type, secret = jwtVar.secretKey) => {
+  generateToken: (user, expires, type, secret = jwtVar.secretKey) => {
     const payload = {
-      id: userId,
+      id: user.id,
+      name: user.displayName,
       iat: moment().unix(),
       exp: expires.unix(),
       type,
@@ -26,13 +27,13 @@ const tokenServices = {
     );
 
     const accessToken = tokenServices.generateToken(
-      user.id,
+      user,
       accessTokenExpires,
       tokenTypes.ACCESS
     );
 
     const refreshToken = tokenServices.generateToken(
-      user.id,
+      user,
       refreshTokenExpires,
       tokenTypes.REFRESH
     );
