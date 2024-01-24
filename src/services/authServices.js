@@ -1,6 +1,7 @@
 const User = require("../models/users.model");
 const Token = require("../models/token.model");
 const httpStatus = require("http-status");
+const { tokenTypes } = require("../config/token");
 
 const authServices = {
   getUserById: async (id) => {
@@ -17,7 +18,7 @@ const authServices = {
     if (!refreshTokenDoc) {
       throw new ApiError(httpStatus.NOT_FOUND, "Logout error");
     }
-    await refreshTokenDoc.remove();
+    await refreshTokenDoc.deleteOne();
   },
 };
 

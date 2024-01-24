@@ -5,7 +5,7 @@ const authRoute = express.Router();
 
 authRoute.post("/login/firebase", authControllers.loginWithFireBase);
 authRoute.post("/refresh", authControllers.refreshToken);
-authRoute.post("/logout", authControllers.logout);
+authRoute.post("/logout", verifyToken, authControllers.logout);
 authRoute.get("/current-user", verifyToken, authControllers.getCurrentUser);
 authRoute.get(
   "/gen-token-livekit",

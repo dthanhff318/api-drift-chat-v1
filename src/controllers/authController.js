@@ -59,11 +59,13 @@ const authControllers = {
   },
   logout: async (req, res) => {
     try {
+      console.log(req.infoUser);
       const { id } = req.infoUser;
       const { refreshToken } = req.body;
       await authServices.logout({ id, refreshToken });
       res.status(httpStatus.NO_CONTENT).send();
     } catch (err) {
+      console.log(err);
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
   },

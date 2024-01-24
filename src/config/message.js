@@ -1,6 +1,6 @@
 const messageTypes = {
-  USER: "user",
-  COMMON: "common",
+  USER: "USER",
+  COMMON: "COMMON",
 };
 
 const listTypeMessage = Object.keys(messageTypes);
