@@ -15,6 +15,28 @@ const userServices = {
     });
     return user;
   },
+  getUserById: async (id) => {
+    return await User.findById(id);
+  },
+  updateLikeProfile: async (id, isLike) => {
+    return await User.findByIdAndUpdate(
+      id,
+      isLike
+        ? {
+            $pull: {
+              likedProfile: id,
+            },
+          }
+        : {
+            $push: {
+              likedProfile: id,
+            },
+          },
+      {
+        new: true,
+      }
+    );
+  },
 };
 
 module.exports = userServices;

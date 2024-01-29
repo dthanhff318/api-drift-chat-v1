@@ -1,8 +1,14 @@
-import http from "http";
-import socket from "socket.io";
+const Server = require("socket.io").Server;
+require("dotenv").config();
 
-export const ioInstance = (app) => {
-  const io = socket();
-  const server = http.Server(app);
-  return io.attach(server);
+let ioInstance;
+const createIoInstance = (httpServer) => {
+  ioInstance = new Server(httpServer, {
+    cors: {
+      origin: process.env.URL_CLIENT,
+      credentials: true,
+    },
+  });
+  return ioInstance;
 };
+module.exports = { ioInstance, createIoInstance };

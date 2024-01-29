@@ -3,10 +3,20 @@ const userServices = require("../services/userServices");
 const { uploadWithCloudinary } = require("../utilities/uploadHelper");
 
 const userController = {
-  getUser: async (req, res) => {
+  getUsers: async (req, res) => {
     try {
       const listUser = await userServices.getAllUser();
       return res.status(httpStatus.OK).json(listUser);
+    } catch (err) {
+      console.log(err);
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
+    }
+  },
+  getUserById: async () => {
+    try {
+      const { id } = req.params;
+      const userDoc = await userServices.getUserById(id);
+      return res.status(httpStatus.OK).json(userDoc);
     } catch (err) {
       console.log(err);
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
@@ -39,6 +49,23 @@ const userController = {
       });
       return res.status(httpStatus.OK).json(user);
     } catch (err) {
+      console.log(err);
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
+    }
+  },
+  likedProfile: async (req, res) => {
+    try {
+      const { user } = req.body;
+      const findUser = await userServices.getUserById(user);
+      if (!findUser)
+        return res.status(httpStatus.NOT_FOUND).json("User not found");
+      const { likedProfile } = findUser;
+      const userDoc = await userServices.updateLikeProfile(
+        user,
+        likedProfile.includes(user)
+      );
+      return res.status(httpStatus.OK).json(userDoc);
+    } catch (e) {
       console.log(err);
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }

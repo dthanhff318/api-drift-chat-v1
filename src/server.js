@@ -11,16 +11,13 @@ const ApiError = require("./utilities/ApiError");
 const httpStatus = require("http-status");
 const { errorConverter, errorHandler } = require("./middlewares/error");
 const { DEFAULT_TIME_DELAY } = require("./constants/index");
+const { createIoInstance } = require("./socketIOConfig/socketConfig");
 require("dotenv").config();
 
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer, {
-  cors: {
-    origin: process.env.URL_CLIENT,
-    credentials: true,
-  },
-});
+const io = createIoInstance(httpServer);
+
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
@@ -34,7 +31,7 @@ app.get("/", (req, res) => {
 });
 app.use("/v1", apiV1);
 
-// Send 404 error for unknon api
+// Send 404 error for unknown api
 app.use((req, res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, "Not found"));
 });
@@ -51,15 +48,10 @@ httpServer.listen(process.env.PORT, process.env.BASE_URL, () => {
 
 io.on("connection", (socket) => {
   let disconectTimeout;
-  // console.log(socket.rooms);
   socket.on("joinRoom", (roomId) => {
     socket.join(roomId);
   });
 
-  // socket.on("sendMessage", (data) => {
-  //   const { room } = data;
-  //   io.to(room).emit("sendMessage", data);
-  // });
   socket.on("userLogin", (user) => {
     setTimeout(() => {
       socket.broadcast.emit("userLogin", user);

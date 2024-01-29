@@ -66,7 +66,6 @@ const groupServices = {
     const { id, user, nickname } = data;
     const group = await Group.findById(id).lean();
     const { setting } = group;
-    console.log(group);
     const updateSetting = setting.map((s) =>
       user === s.user ? { ...s, nickname } : s
     );

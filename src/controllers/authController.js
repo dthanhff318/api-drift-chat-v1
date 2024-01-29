@@ -59,7 +59,6 @@ const authControllers = {
   },
   logout: async (req, res) => {
     try {
-      console.log(req.infoUser);
       const { id } = req.infoUser;
       const { refreshToken } = req.body;
       await authServices.logout({ id, refreshToken });

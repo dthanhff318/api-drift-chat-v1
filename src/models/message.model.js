@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 const { toJSON, paginate } = require("./plugins");
-const { listTypeMessage, messageTypes } = require("../config/message");
+const {
+  listTypeMessage,
+  messageTypes,
+  actionTypes,
+  listActionTypeMessage,
+} = require("../config/message");
 
 const messageSchema = new mongoose.Schema(
   {
@@ -35,6 +40,20 @@ const messageSchema = new mongoose.Schema(
       type: String,
       enum: listTypeMessage,
       default: messageTypes.USER,
+    },
+    targetUser: {
+      type: String,
+      default: null,
+      ref: "User",
+    },
+    actionType: {
+      type: String,
+      enum: listActionTypeMessage,
+      default: actionTypes.NONE,
+    },
+    contentAction: {
+      type: String,
+      default: null,
     },
   },
   {

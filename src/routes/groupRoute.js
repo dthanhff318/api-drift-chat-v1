@@ -4,7 +4,6 @@ const { uploadFormidable } = require("../middlewares/upload");
 const groupController = require("../controllers/groupController");
 
 const groupRoute = express.Router();
-
 groupRoute.get("/", verifyToken, groupController.getAllGroup);
 groupRoute.get("/:id", verifyToken, groupController.getDetailGroup);
 groupRoute.post("/create-group", verifyToken, groupController.createGroup);
@@ -26,5 +25,6 @@ groupRoute.post(
   uploadFormidable,
   groupController.changePhoto
 );
+groupRoute.get("/leave/:groupId", verifyToken, groupController.leaveGroup);
 
 module.exports = groupRoute;

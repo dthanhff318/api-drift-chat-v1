@@ -39,11 +39,18 @@ const userSchema = new mongoose.Schema({
   },
   introduction: {
     type: String,
-    default: "Hi",
+    default: "Hello",
   },
   inviteId: {
     type: String,
   },
+  likedProfile: [
+    {
+      type: Number,
+      default: 0,
+      ref: "User",
+    },
+  ],
 });
 
 // Tell Mongoose to include virtual properties when converting documents to JSON
