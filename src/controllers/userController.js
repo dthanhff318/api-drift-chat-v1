@@ -12,7 +12,7 @@ const userController = {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
   },
-  getUserById: async () => {
+  getUserById: async (req, res) => {
     try {
       const { id } = req.params;
       const userDoc = await userServices.getUserById(id);

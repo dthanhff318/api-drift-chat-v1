@@ -5,6 +5,7 @@ const uploadWithCloudinary = async (filePath) => {
     filePath,
     defaulOptions
   );
+  console.log(resultUpload);
   return resultUpload;
 };
 
