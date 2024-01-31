@@ -1,9 +1,9 @@
 const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
-  cloud_name: "dehyltryf",
-  api_key: "551392444219214",
-  api_secret: "Y5ZHQRN3TWLign1aoIbujCzABUE",
+  cloud_name: "drift-chat",
+  api_key: "432889269835143",
+  api_secret: "1kZW72kRSEJUlnuZ3X-O_fG1Wcs",
 });
 
 const defaulOptions = {
