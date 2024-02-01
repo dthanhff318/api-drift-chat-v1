@@ -18,18 +18,18 @@ const userServices = {
   getUserById: async (id) => {
     return await User.findById(id);
   },
-  updateLikeProfile: async (id, isLike) => {
+  updateLikeProfile: async (userAction, userTarget, isLike) => {
     return await User.findByIdAndUpdate(
-      id,
+      userTarget,
       isLike
         ? {
             $pull: {
-              likedProfile: id,
+              likedProfile: userAction,
             },
           }
         : {
             $push: {
-              likedProfile: id,
+              likedProfile: userAction,
             },
           },
       {

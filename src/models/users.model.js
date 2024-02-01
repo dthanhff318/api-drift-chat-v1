@@ -46,11 +46,14 @@ const userSchema = new mongoose.Schema({
   },
   likedProfile: [
     {
-      type: Number,
-      default: 0,
+      type: String,
       ref: "User",
     },
   ],
+  thumbProfile: {
+    type: String,
+    default: null,
+  },
 });
 
 // Tell Mongoose to include virtual properties when converting documents to JSON

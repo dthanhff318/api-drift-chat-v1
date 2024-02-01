@@ -13,6 +13,6 @@ userRoute.post(
   uploadFormidable,
   userController.uploadAvatar
 );
-userRoute.post("/likeProfile", verifyToken, userController.uploadAvatar);
+userRoute.post("/likeProfile", verifyToken, userController.likedProfile);
 
 module.exports = userRoute;

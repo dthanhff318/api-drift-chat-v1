@@ -55,17 +55,19 @@ const userController = {
   },
   likedProfile: async (req, res) => {
     try {
+      const { id } = req.infoUser;
       const { user } = req.body;
       const findUser = await userServices.getUserById(user);
       if (!findUser)
         return res.status(httpStatus.NOT_FOUND).json("User not found");
       const { likedProfile } = findUser;
       const userDoc = await userServices.updateLikeProfile(
+        id,
         user,
-        likedProfile.includes(user)
+        likedProfile.includes(id)
       );
       return res.status(httpStatus.OK).json(userDoc);
-    } catch (e) {
+    } catch (err) {
       console.log(err);
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
