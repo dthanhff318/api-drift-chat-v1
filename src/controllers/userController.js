@@ -36,15 +36,16 @@ const userController = {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
   },
-  uploadAvatar: async (req, res) => {
+  uploadUser: async (req, res) => {
     try {
       const { id } = req.infoUser;
       const file = req.file;
+      const { type } = req.dataUpload;
       const upload = await uploadWithCloudinary(file.filepath);
       const user = await userServices.updateUser({
         id,
         dataUpdate: {
-          photoUrl: upload.url,
+          [type]: upload.url,
         },
       });
       return res.status(httpStatus.OK).json(user);
@@ -53,6 +54,7 @@ const userController = {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
   },
+
   likedProfile: async (req, res) => {
     try {
       const { id } = req.infoUser;

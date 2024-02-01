@@ -8,11 +8,12 @@ userRoute.get("/", verifyToken, userController.getUsers);
 userRoute.patch("/", verifyToken, userController.updateUser);
 userRoute.get("/:id", verifyToken, userController.getUserById);
 userRoute.post(
-  "/avatar",
+  "/upload",
   verifyToken,
   uploadFormidable,
-  userController.uploadAvatar
+  userController.uploadUser
 );
+
 userRoute.post("/likeProfile", verifyToken, userController.likedProfile);
 
 module.exports = userRoute;
