@@ -1,6 +1,8 @@
 const httpStatus = require("http-status");
+const historyProfileServices = require("../services/historyProfile.services");
 const userServices = require("../services/userServices");
 const { uploadWithCloudinary } = require("../utilities/uploadHelper");
+const { historyActionTypes } = require("../config/history");
 
 const userController = {
   getUsers: async (req, res) => {
@@ -63,11 +65,15 @@ const userController = {
       if (!findUser)
         return res.status(httpStatus.NOT_FOUND).json("User not found");
       const { likedProfile } = findUser;
-      const userDoc = await userServices.updateLikeProfile(
-        id,
-        user,
-        likedProfile.includes(id)
-      );
+      const isLiked = likedProfile.includes(id);
+      const userDoc = await userServices.updateLikeProfile(id, user, isLiked);
+      await historyProfileServices.createHistory({
+        historyOwner: user,
+        userTarget: id,
+        actionHistoryType: isLiked
+          ? historyActionTypes.UNLIKE
+          : historyActionTypes.LIKE,
+      });
       return res.status(httpStatus.OK).json(userDoc);
     } catch (err) {
       console.log(err);
