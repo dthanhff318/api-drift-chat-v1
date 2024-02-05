@@ -114,6 +114,11 @@ const friendController = {
         .json("Something error");
     }
   },
+  sendRequest: async (req, res) => {
+    const { friendId } = req.body;
+    const newDataFriend = {
+      
+    }
 };
 
 module.exports = friendController;
