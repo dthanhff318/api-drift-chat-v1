@@ -32,5 +32,5 @@ const historyProfileSchema = new mongoose.Schema(
 historyProfileSchema.plugin(toJSON);
 historyProfileSchema.plugin(paginate);
 
-const Message = mongoose.model("HistoryProfile", historyProfileSchema);
-module.exports = Message;
+const HistoryProfile = mongoose.model("HistoryProfile", historyProfileSchema);
+module.exports = HistoryProfile;

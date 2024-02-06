@@ -23,7 +23,10 @@ const authControllers = {
       friendObj.save();
       userData = user;
     }
-    const { access, refresh } = await tokenSevices.generateAuthTokens(userData);
+    const { access, refresh } = await tokenSevices.generateAuthTokens(
+      userData.id,
+      userData.displayName
+    );
     const dataResponse = {
       user: userData,
       token: {
@@ -38,7 +41,8 @@ const authControllers = {
       const refreshTk = req.body.refresh;
       const decodeTokenValue = await decodeToken(refreshTk);
       const { access, refresh } = await tokenSevices.generateAuthTokens(
-        decodeTokenValue
+        decodeTokenValue.id,
+        decodeTokenValue.name
       );
       return res.status(HTTPStatusCode.OK).json({
         accessToken: access,
@@ -71,6 +75,7 @@ const authControllers = {
   genTokenLivekit: (req, res) => {
     try {
       const { name } = req.infoUser;
+      console.log(req.infoUser);
       const { room } = req.query;
       const token = livekitServices.createToken({ name, room });
       return res.status(HTTPStatusCode.OK).json(token);

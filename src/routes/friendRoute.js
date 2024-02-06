@@ -7,13 +7,11 @@ const friendRoute = express.Router();
 
 friendRoute.get("/", verifyToken, friendController.getInfoCommunication);
 friendRoute.post(
-  "/add",
+  "/send-friend-request",
   verifyToken,
   validate(friendValidation.sendAddFriend),
-  friendController.addFriend
+  friendController.sendFriendRequest
 );
 friendRoute.post("/accept", verifyToken, friendController.acceptFriend);
-
-friendRoute.post("/send-request", verifyToken, friendController.sendRequest);
 
 module.exports = friendRoute;

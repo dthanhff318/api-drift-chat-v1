@@ -1,5 +1,4 @@
-const Group = require("../models/groups.model");
-const { HTTPStatusCode } = require("../constants");
+const httpStatus = require("http-status");
 const Friend = require("../models/friends.model");
 const friendServices = require("../services/friendServices");
 const ApiError = require("../utilities/ApiError");
@@ -9,62 +8,26 @@ const friendController = {
   getInfoCommunication: async (req, res) => {
     try {
       const { id } = req.infoUser;
-      // const infoFriendUser = await (
-      //   await Friend.findById(id)
-      // ).populate({
-      //   path: "listFriend listAccept listRequest listBlock",
-      //   model: "User",
-      //   select: "displayName photoUrl lastActive",
-      //   localField: "uid",
-      //   foreignField: "uid",
-      // });
-      const infoFriendUser = await friendServices.getDataFriendUser(id);
-      if (infoFriendUser) {
-        return res.status(HTTPStatusCode.OK).json(infoFriendUser);
-      } else {
-        return res.status(HTTPStatusCode.BAD_REQUEST).json("Not found");
-      }
+      const infoFriendUser = await friendServices.getDataFriendUserDetail(id);
+      return res.status(httpStatus.OK).json(infoFriendUser);
     } catch (err) {
-      return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
+      console.log(err);
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
   },
   // Send request add friend or cancel request
-  addFriend: async (req, res) => {
+  sendFriendRequest: async (req, res) => {
     try {
       const { friendId } = req.body;
       const { id } = req.infoUser;
-      if (id === friendId) {
-        return res
-          .status(HTTPStatusCode.BAD_REQUEST)
-          .json("Can not send request to yourself");
-      }
-      const dataFriendSender = await friendServices.getDataFriendUser(id);
-      const dataFriendReceive = await friendServices.getDataFriendUser(
-        friendId
-      );
-      if (!dataFriendReceive || !dataFriendSender) {
-        return res
-          .status(HTTPStatusCode.NOT_FOUND)
-          .json("Not found data friend");
-      }
-      // Check if user have sent request yet
-      if (dataFriendReceive.listAccept.includes(id)) {
-        await friendServices.cancelRequestAddFriend(id, {
-          listRequest: friendId,
+      const friendRequest =
+        await friendServices.handleSendAndUnsendFriendRequest({
+          userSend: id,
+          userReceive: friendId,
         });
-        await friendServices.cancelRequestAddFriend(friendId, {
-          listAccept: id,
-        });
-        return res.status(HTTPStatusCode.OK).json("Cancel request success");
-      }
-      await friendServices.addFriendData(id, { listRequest: friendId });
-      await friendServices.addFriendData(friendId, { listAccept: id });
-      return res.status(HTTPStatusCode.OK).json("Send request success");
+      return res.status(httpStatus.OK).json(friendRequest);
     } catch (err) {
-      console.log(err);
-      return res
-        .status(HTTPStatusCode.INTERNAL_SERVER_ERROR)
-        .json("Something error");
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
   },
   acceptFriend: async (req, res) => {
@@ -73,15 +36,13 @@ const friendController = {
       const { id } = req.infoUser;
       if (id === friendId) {
         return res
-          .status(HTTPStatusCode.BAD_REQUEST)
+          .status(httpStatus.BAD_REQUEST)
           .json("Can not send request to yourself");
       }
       const dataFriendReceive = await friendServices.getDataFriendUser(id);
       const dataFriendSender = await friendServices.getDataFriendUser(friendId);
       if (!dataFriendReceive || !dataFriendSender) {
-        return res
-          .status(HTTPStatusCode.NOT_FOUND)
-          .json("Not found data friend");
+        return res.status(httpStatus.NOT_FOUND).json("Not found data friend");
       }
       // Check if 2 people have added friend
       if (
@@ -89,7 +50,7 @@ const friendController = {
         dataFriendSender.listFriend.find((e) => e.id === id)
       ) {
         return res
-          .status(HTTPStatusCode.BAD_REQUEST)
+          .status(httpStatus.BAD_REQUEST)
           .json("You are already friends");
       }
       await friendServices.acceptFriendData(
@@ -106,19 +67,14 @@ const friendController = {
         admins: [id, friendId],
         members: [id, friendId],
       });
-      return res.status(HTTPStatusCode.OK).json("Accept friend success");
+      return res.status(httpStatus.OK).json("Accept friend success");
     } catch (err) {
       console.log(err);
       return res
-        .status(HTTPStatusCode.INTERNAL_SERVER_ERROR)
+        .status(httpStatus.INTERNAL_SERVER_ERROR)
         .json("Something error");
     }
   },
-  sendRequest: async (req, res) => {
-    const { friendId } = req.body;
-    const newDataFriend = {
-      
-    }
 };
 
 module.exports = friendController;
