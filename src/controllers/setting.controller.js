@@ -1,6 +1,7 @@
 const httpStatus = require("http-status");
 const settingServices = require("../services/setting.services");
 const { messageTypes, actionTypes } = require("../config/message");
+const { historyActionTypes } = require("../config/history");
 
 const settingController = {
   createSetting: async (req, res) => {
@@ -15,6 +16,7 @@ const settingController = {
       const commonData = {
         messageTypes,
         actionGroupTypes: actionTypes,
+        historyActions: historyActionTypes,
       };
       const themes = await settingServices.getTheme();
       const settings = {
