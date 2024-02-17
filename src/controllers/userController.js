@@ -17,7 +17,15 @@ const userController = {
   getUserById: async (req, res) => {
     try {
       const { id } = req.params;
+      const { id: currentUserId } = req.infoUser;
       const userDoc = await userServices.getUserById(id);
+      if (currentUserId !== id) {
+        await historyProfileServices.createHistory({
+          historyOwner: currentUserId,
+          userTarget: id,
+          actionHistoryType: historyActionTypes.VISIT,
+        });
+      }
       return res.status(httpStatus.OK).json(userDoc);
     } catch (err) {
       console.log(err);

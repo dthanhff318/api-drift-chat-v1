@@ -11,7 +11,10 @@ const historyProfileServices = {
     return await historyObj.save();
   },
   getHistoryByOwnerId: async (id) => {
-    return await HistoryProfile.find({ historyOwner: id });
+    return await HistoryProfile.find({ historyOwner: id }).populate([
+      "userTarget",
+      "historyOwner",
+    ]);
   },
 };
 
