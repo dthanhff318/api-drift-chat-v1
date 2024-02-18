@@ -21,8 +21,8 @@ const userController = {
       const userDoc = await userServices.getUserById(id);
       if (currentUserId !== id) {
         await historyProfileServices.createHistory({
-          historyOwner: currentUserId,
-          userTarget: id,
+          historyOwner: id,
+          userTarget: currentUserId,
           actionHistoryType: historyActionTypes.VISIT,
         });
       }

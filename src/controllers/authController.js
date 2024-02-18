@@ -7,6 +7,7 @@ const authServices = require("../services/authServices");
 const { nanoid } = require("nanoid");
 const tokenSevices = require("../services/token.services");
 const livekitServices = require("../services/livekit.services");
+const userServices = require("../services/userServices");
 
 const authControllers = {
   loginWithFireBase: async (req, res) => {
@@ -34,6 +35,12 @@ const authControllers = {
         refreshToken: refresh,
       },
     };
+    await userServices.updateUser({
+      id: userData.id,
+      dataUpdate: {
+        isOnline: true,
+      },
+    });
     return res.status(HTTPStatusCode.OK).json(dataResponse);
   },
   refreshToken: async (req, res) => {

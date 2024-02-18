@@ -7,7 +7,7 @@ const friendServices = {
     const dataFriend = await Friend.findOne({ userId: id }).populate({
       path: "listFriend listAccept listRequest listBlock",
       model: "User",
-      select: "displayName photoUrl lastActive",
+      select: "displayName photoUrl lastActive isOnline",
     });
     return dataFriend;
   },

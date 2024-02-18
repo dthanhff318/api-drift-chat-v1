@@ -12,6 +12,7 @@ const httpStatus = require("http-status");
 const { errorConverter, errorHandler } = require("./middlewares/error");
 const { DEFAULT_TIME_DELAY } = require("./constants/index");
 const { createIoInstance } = require("./socketIOConfig/socketConfig");
+const userServices = require("./services/userServices");
 require("dotenv").config();
 
 const app = express();
@@ -64,6 +65,10 @@ io.on("connection", (socket) => {
 
   socket.on("deleteMessage", (data) => {
     socket.broadcast.emit("deleteMessage", data);
+  });
+
+  socket.on("close-app", (data) => {
+    console.log(data);
   });
 
   socket.on("disconnect", () => {});
