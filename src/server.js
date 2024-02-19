@@ -48,7 +48,14 @@ httpServer.listen(process.env.PORT, process.env.BASE_URL, () => {
 });
 
 io.on("connection", (socket) => {
-  let disconectTimeout;
+  const { id } = socket.handshake.query;
+  id &&
+    userServices.updateUser({
+      id,
+      dataUpdate: {
+        isOnline: true,
+      },
+    });
   socket.on("joinRoom", (roomId) => {
     socket.join(roomId);
   });
@@ -67,8 +74,15 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("deleteMessage", data);
   });
 
-  socket.on("close-app", (data) => {
-    console.log(data);
+  socket.on("closeApp", (data) => {
+    const { id, time } = data;
+    userServices.updateUser({
+      id,
+      dataUpdate: {
+        isOnline: false,
+        lastActive: Date.now(),
+      },
+    });
   });
 
   socket.on("disconnect", () => {});
