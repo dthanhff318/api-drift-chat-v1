@@ -25,7 +25,7 @@ const groupServices = {
     const groups = await Group.find({ members: { $in: [id] } }).populate({
       path: "members",
       model: "User",
-      select: "displayName photoUrl lastActive uid ",
+      select: "displayName photoUrl lastActive uid isOnline",
     });
     const extraDataGroups = await Promise.all(
       groups.map(async (e) => {
