@@ -6,6 +6,7 @@ const userRoute = express.Router();
 
 userRoute.get("/", verifyToken, userController.getUsers);
 userRoute.patch("/", verifyToken, userController.updateUser);
+userRoute.get("/signed-url", verifyToken, userController.getSignedUrl);
 userRoute.get("/:id", verifyToken, userController.getUserById);
 userRoute.post(
   "/upload",
