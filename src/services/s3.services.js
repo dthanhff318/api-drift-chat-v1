@@ -17,6 +17,14 @@ const s3Services = {
   getS3FilePath: (fileName) => {
     return `https://${s3Config.bucket}.s3.${s3Config.region}.amazonaws.com/${fileName}`;
   },
+  deleteS3File: (fileName) => {
+    const params = {
+      Bucket: s3Config.bucket,
+      Key: fileName,
+    };
+
+    return s3.deleteObject(params);
+  },
 };
 
 module.exports = s3Services;

@@ -4,6 +4,7 @@ const userServices = require("../services/userServices");
 const { uploadWithCloudinary } = require("../utilities/uploadHelper");
 const { historyActionTypes } = require("../config/history");
 const s3Services = require("../services/s3.services");
+const axios = require("axios");
 
 const userController = {
   getUsers: async (req, res) => {
@@ -59,11 +60,6 @@ const userController = {
           [type]: upload.url,
         },
       });
-      const signUrl = await s3Services.getSignedURL(
-        file.originalFilename,
-        file.mimetype
-      );
-
       const urlFile = s3Services.getS3FilePath(file.originalFilename);
       console.log(urlFile);
       return res.status(httpStatus.OK).json(user);
@@ -95,6 +91,14 @@ const userController = {
       console.log(err);
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
+  },
+  getSignedUrl: async (req, res) => {
+    const { fileName, fileType } = req.query;
+    const signedUrl = await s3Services.getSignedURL(
+      `${fileName.trim()}`,
+      fileType
+    );
+    return res.status(httpStatus.OK).send(signedUrl);
   },
 };
 

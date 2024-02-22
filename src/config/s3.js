@@ -6,6 +6,7 @@ const s3Config = {
   secretAccessKey: process.env.S3_SECRET_KEY,
   region: process.env.S3_REGION,
   bucket: process.env.S3_BUCKET,
+  signatureVersion: 'v4',
 };
 
 module.exports = { s3Config };
