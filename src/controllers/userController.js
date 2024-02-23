@@ -4,7 +4,7 @@ const userServices = require("../services/userServices");
 const { uploadWithCloudinary } = require("../utilities/uploadHelper");
 const { historyActionTypes } = require("../config/history");
 const s3Services = require("../services/s3.services");
-const axios = require("axios");
+const ApiError = require("../utilities/ApiError");
 
 const userController = {
   getUsers: async (req, res) => {
@@ -51,17 +51,24 @@ const userController = {
   uploadUser: async (req, res) => {
     try {
       const { id } = req.infoUser;
-      const file = req.file;
-      const { type } = req.dataUpload;
-      const upload = await uploadWithCloudinary(file.filepath);
+      const { type, fileName } = req.body;
+      const userFind = await userServices.getUserById(id);
+      if (!userFind) {
+        throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+      }
+
+      if (userFind.thumbProfile) {
+        await s3Services.deleteS3File(
+          s3Services.getFileNameS3(userFind.thumbProfile)
+        );
+      }
+      const urlFileS3 = s3Services.getS3FilePath(`${id}_${fileName}`);
       const user = await userServices.updateUser({
         id,
         dataUpdate: {
-          [type]: upload.url,
+          [type]: urlFileS3,
         },
       });
-      const urlFile = s3Services.getS3FilePath(file.originalFilename);
-      console.log(urlFile);
       return res.status(httpStatus.OK).json(user);
     } catch (err) {
       console.log(err);
@@ -93,9 +100,10 @@ const userController = {
     }
   },
   getSignedUrl: async (req, res) => {
+    const { id } = req.infoUser;
     const { fileName, fileType } = req.query;
     const signedUrl = await s3Services.getSignedURL(
-      `${fileName.trim()}`,
+      `${id}_${fileName.trim()}`,
       fileType
     );
     return res.status(httpStatus.OK).send(signedUrl);

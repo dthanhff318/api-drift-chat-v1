@@ -17,13 +17,18 @@ const s3Services = {
   getS3FilePath: (fileName) => {
     return `https://${s3Config.bucket}.s3.${s3Config.region}.amazonaws.com/${fileName}`;
   },
-  deleteS3File: (fileName) => {
+  deleteS3File: async (fileName) => {
     const params = {
       Bucket: s3Config.bucket,
       Key: fileName,
     };
 
     return s3.deleteObject(params);
+  },
+
+  getFileNameS3: (s3AvatarPath) => {
+    const items = s3AvatarPath.split("/");
+    return items[items.length - 1];
   },
 };
 

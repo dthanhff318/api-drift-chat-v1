@@ -11,7 +11,6 @@ userRoute.get("/:id", verifyToken, userController.getUserById);
 userRoute.post(
   "/upload",
   verifyToken,
-  uploadFormidable,
   userController.uploadUser
 );
 
