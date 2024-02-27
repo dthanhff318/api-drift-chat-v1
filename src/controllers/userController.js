@@ -62,7 +62,7 @@ const userController = {
           s3Services.getFileNameS3(userFind.thumbProfile)
         );
       }
-      const urlFileS3 = s3Services.getS3FilePath(`${id}_${fileName}`);
+      const urlFileS3 = s3Services.getFilePathS3(`${id}_${fileName}`);
       const user = await userServices.updateUser({
         id,
         dataUpdate: {

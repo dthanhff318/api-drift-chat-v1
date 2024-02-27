@@ -8,6 +8,7 @@ const groupRoute = require("./group.route");
 const userRoute = require("./user.route");
 const settingRoute = require("./setting.route");
 const historyProfileRoute = require("./historyProfile.route");
+const postRoute = require("./post.route");
 
 apiV1.use("/auth", authRoute);
 apiV1.use("/friends", friendRoute);
@@ -17,5 +18,6 @@ apiV1.use("/message", messageRoute);
 apiV1.use("/groups", groupRoute);
 apiV1.use("/settings", settingRoute);
 apiV1.use("/history-profile", historyProfileRoute);
+apiV1.use("/post", postRoute);
 
 module.exports = apiV1;

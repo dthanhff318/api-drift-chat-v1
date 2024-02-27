@@ -14,7 +14,7 @@ const s3Services = {
 
     return s3.getSignedUrl("putObject", params);
   },
-  getS3FilePath: (fileName) => {
+  getFilePathS3: (fileName) => {
     return `https://${s3Config.bucket}.s3.${s3Config.region}.amazonaws.com/${fileName}`;
   },
   deleteS3File: async (fileName) => {
