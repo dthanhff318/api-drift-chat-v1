@@ -10,14 +10,7 @@ const groupController = {
     try {
       const { id } = req.infoUser;
       const groups = await groupServices.getGroups(id, "");
-
-      if (groups.length === 0) {
-        return res
-          .status(httpStatus.NOT_FOUND)
-          .json({ message: "No group found" });
-      } else {
-        return res.status(httpStatus.OK).json(groups);
-      }
+      return res.status(httpStatus.OK).json(groups);
     } catch (err) {
       console.log(err);
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);

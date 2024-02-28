@@ -16,7 +16,7 @@ const friendController = {
     }
   },
   // Send request add friend or cancel request
-  sendFriendRequest: async (req, res) => {
+  handleFriendRequest: async (req, res) => {
     try {
       const { friendId } = req.body;
       const { id } = req.infoUser;
@@ -37,7 +37,7 @@ const friendController = {
       if (id === friendId) {
         return res
           .status(httpStatus.BAD_REQUEST)
-          .json("Can not send request to yourself");
+          .json("Can not accept yourself");
       }
       const dataFriendReceive = await friendServices.getDataFriendUser(id);
       const dataFriendSender = await friendServices.getDataFriendUser(friendId);
