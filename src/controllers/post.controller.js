@@ -21,8 +21,9 @@ const postController = {
       const { caption, fileNameList } = req.body;
       const imageList = [];
       for (const name of fileNameList) {
-        const fileName = `post_${id}_${name}`;
-        const filePathS3 = s3Services.getFilePathS3(fileName);
+        const fileNameS3 = s3Services.getFileNameS3(name);
+        const fileNameGen = `post_${id}_${fileNameS3}`;
+        const filePathS3 = s3Services.getFilePathS3(fileNameGen);
         imageList.push(filePathS3);
       }
       await postServices.createPost({
