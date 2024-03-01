@@ -69,6 +69,15 @@ const postController = {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
   },
+  getCommentByPost: async (req, res) => {
+    try {
+      const { postId } = req.params;
+      const comments = await commentServices.getCommentByPostId(postId);
+      return res.status(httpStatus.OK).json(comments);
+    } catch (err) {
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
+    }
+  },
 };
 
 module.exports = postController;

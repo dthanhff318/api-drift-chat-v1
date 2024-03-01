@@ -2,7 +2,11 @@ const Post = require("../models/post.model");
 
 const postServices = {
   getPostByUserId: async (id) => {
-    const posts = await Post.find({ user: id });
+    const posts = await Post.find({ user: id }).populate({
+      path: "user",
+      model: "User",
+      select: "displayName photoUrl lastActive uid isOnline",
+    });
     return posts;
   },
   createPost: async (data) => {
