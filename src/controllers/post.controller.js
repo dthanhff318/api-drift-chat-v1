@@ -2,12 +2,13 @@ const httpStatus = require("http-status");
 const s3Services = require("../services/s3.services");
 const postServices = require("../services/post.services");
 const commentServices = require("../services/comment.services");
+const ApiError = require("../utilities/ApiError");
 
 const postController = {
   getPosts: async (req, res) => {
     try {
       const { id } = req.infoUser;
-      const { userId } = req.params;
+      const { userId } = req.query;
       const posts = await postServices.getPostByUserId(userId || id);
       return res.status(httpStatus.OK).json(posts);
     } catch (err) {
@@ -55,6 +56,27 @@ const postController = {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
   },
+  likedPost: async (req, res) => {
+    try {
+      const { id } = req.infoUser;
+      const { postId } = req.body;
+      const postDoc = await postServices.getPostById(postId);
+      if (!postDoc) {
+        throw new ApiError(httpStatus.NOT_FOUND, "Post not exist");
+      }
+      const isLiked = postDoc?.stars?.includes(id);
+      const postUpdate = await postServices.likeAndUnlikePost(
+        postId,
+        id,
+        isLiked
+      );
+      return res.status(httpStatus.OK).json(postUpdate);
+    } catch (err) {
+      console.log(err);
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
+    }
+  },
+  // Comment
   commentPost: async (req, res) => {
     try {
       const { id } = req.infoUser;

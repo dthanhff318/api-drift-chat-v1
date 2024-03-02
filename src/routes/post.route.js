@@ -10,6 +10,7 @@ postRoute.post(
   verifyToken,
   postController.signedImagePost
 );
+postRoute.post("/like", verifyToken, postController.likedPost);
 postRoute.post("/comment", verifyToken, postController.commentPost);
 postRoute.get("/comment/:postId", verifyToken, postController.getCommentByPost);
 
