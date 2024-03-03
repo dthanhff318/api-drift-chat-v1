@@ -49,6 +49,7 @@ httpServer.listen(process.env.PORT, process.env.BASE_URL, () => {
 
 io.on("connection", (socket) => {
   const { id } = socket.handshake.query;
+  // Update status user when connect socket
   id &&
     userServices.updateUser({
       id,
@@ -74,8 +75,13 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("deleteMessage", data);
   });
 
+  // Friend Event
+  socket.on("ADD_FRIEND", (friendId) => {
+    socket.broadcast.emit("ADD_FRIEND", friendId);
+  });
+
   socket.on("closeApp", (data) => {
-    const { id, time } = data;
+    const { id } = data;
     userServices.updateUser({
       id,
       dataUpdate: {
