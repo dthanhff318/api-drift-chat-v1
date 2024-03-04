@@ -63,16 +63,32 @@ const friendController = {
         { listRequest: id },
         { listFriend: id }
       );
-      await groupServices.createGroup({
-        admins: [id, friendId],
-        members: [id, friendId],
-      });
+      const isHaveGroupYet = await groupServices.checkGroupPrivateIsExist(
+        id,
+        friendId
+      );
+      if (!isHaveGroupYet) {
+        await groupServices.createGroup({
+          admins: [id, friendId],
+          members: [id, friendId],
+        });
+      }
       return res.status(httpStatus.OK).json("Accept friend success");
     } catch (err) {
       console.log(err);
       return res
         .status(httpStatus.INTERNAL_SERVER_ERROR)
         .json("Something error");
+    }
+  },
+  unfriend: async (req, res) => {
+    try {
+      const { id } = req.infoUser;
+      const { friendId } = req.body;
+      await friendServices.unfriend(id, friendId);
+      res.status(httpStatus.NO_CONTENT).send();
+    } catch (err) {
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
   },
 };

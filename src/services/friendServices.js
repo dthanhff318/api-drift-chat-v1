@@ -62,7 +62,6 @@ const friendServices = {
         listAccept: userSend,
       });
       return userSendData;
-      // return res.status(httpStatus.OK).json("Cancel request success");
     } else {
       const userSendData = await friendServices.addFriendData(userSend, {
         listRequest: userReceive,
@@ -82,6 +81,20 @@ const friendServices = {
       { new: true }
     );
     return updateFriendData;
+  },
+  unfriend: async (id, friendId) => {
+    await Friend.findOneAndUpdate(
+      { userId: id },
+      {
+        $pull: { listFriend: friendId },
+      }
+    );
+    await Friend.findOneAndUpdate(
+      { userId: friendId },
+      {
+        $pull: { listFriend: id },
+      }
+    );
   },
 };
 

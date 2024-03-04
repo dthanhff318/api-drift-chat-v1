@@ -103,6 +103,12 @@ const groupServices = {
     );
     return addUser;
   },
+  checkGroupPrivateIsExist: async (id, friendId) => {
+    const checkGroupExist = await Group.findOne({
+      members: { $all: [id, friendId] },
+    });
+    return checkGroupExist;
+  },
 };
 
 module.exports = groupServices;

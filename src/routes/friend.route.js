@@ -13,5 +13,6 @@ friendRoute.post(
   friendController.handleFriendRequest
 );
 friendRoute.post("/accept", verifyToken, friendController.acceptFriend);
+friendRoute.post("/unfriend", verifyToken, friendController.unfriend);
 
 module.exports = friendRoute;
