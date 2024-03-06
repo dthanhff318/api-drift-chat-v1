@@ -79,6 +79,9 @@ io.on("connection", (socket) => {
   socket.on("ADD_FRIEND", (friendId) => {
     socket.broadcast.emit("ADD_FRIEND", friendId);
   });
+  socket.on("ACCEPT_REQUEST", (friendName) => {
+    socket.broadcast.emit("ACCEPT_REQUEST", friendName);
+  });
 
   socket.on("closeApp", (data) => {
     const { id } = data;
