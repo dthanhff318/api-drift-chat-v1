@@ -27,12 +27,12 @@ const postController = {
         const filePathS3 = s3Services.getFilePathS3(fileNameGen);
         imageList.push(filePathS3);
       }
-      await postServices.createPost({
+      const newPost = await postServices.createPost({
         user: id,
         caption,
         images: imageList,
       });
-      return res.status(httpStatus.OK).json();
+      return res.status(httpStatus.OK).json(newPost);
     } catch (err) {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
