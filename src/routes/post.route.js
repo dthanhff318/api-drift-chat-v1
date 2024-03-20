@@ -5,6 +5,8 @@ const postRoute = express.Router();
 
 postRoute.get("/", verifyToken, postController.getPosts);
 postRoute.post("/", verifyToken, postController.createPost);
+postRoute.patch("/:postId", verifyToken, postController.updatePost);
+postRoute.delete("/:postId", verifyToken, postController.deletePost);
 postRoute.post(
   "/signed-image-post",
   verifyToken,

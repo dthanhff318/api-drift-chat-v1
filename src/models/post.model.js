@@ -22,6 +22,10 @@ const postModel = new mongoose.Schema({
       ref: "User",
     },
   ],
+  pin: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // Tell Mongoose to include virtual properties when converting documents to JSON

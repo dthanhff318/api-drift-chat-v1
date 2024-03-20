@@ -37,6 +37,17 @@ const postController = {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
   },
+  updatePost: async (req, res) => {},
+  deletePost: async (req, res) => {
+    try {
+      const { postId } = req.params;
+      await postServices.deletePost(postId);
+      res.status(httpStatus.OK).send();
+    } catch (err) {
+      console.log(err);
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
+    }
+  },
   signedImagePost: async (req, res) => {
     try {
       const { id } = req.infoUser;

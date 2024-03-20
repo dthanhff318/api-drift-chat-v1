@@ -1,4 +1,5 @@
 const Post = require("../models/post.model");
+const s3Services = require("../services/s3.services");
 
 const postServices = {
   getPostByUserId: async (id) => {
@@ -26,6 +27,16 @@ const postServices = {
       }
     );
     return updatePost;
+  },
+  deletePost: async (postId) => {
+    const post = await Post.findById(postId).exec();
+    if (post) {
+      const { images } = post;
+      for (const imgs of images) {
+        await s3Services.deleteS3File(s3Services.getFileNameS3(imgs));
+      }
+      await Post.findByIdAndDelete(postId);
+    }
   },
 };
 

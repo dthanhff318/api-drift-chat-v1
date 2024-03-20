@@ -22,12 +22,11 @@ const s3Services = {
       Bucket: s3Config.bucket,
       Key: fileName,
     };
-
     return s3.deleteObject(params);
   },
 
-  getFileNameS3: (s3AvatarPath) => {
-    const items = s3AvatarPath.split("/");
+  getFileNameS3: (s3Path) => {
+    const items = s3Path.split("/");
     return items[items.length - 1];
   },
 };
