@@ -14,6 +14,16 @@ const postServices = {
     const post = await Post.findById(id);
     return post;
   },
+  getPostDetail: async (id) => {
+    const post = await (
+      await Post.findById(id)
+    ).populate({
+      path: "user",
+      model: "User",
+      select: "displayName photoUrl",
+    });
+    return post;
+  },
   createPost: async (data) => {
     const post = new Post(data);
     return await post.save();
@@ -27,6 +37,9 @@ const postServices = {
       }
     );
     return updatePost;
+  },
+  updatePost: async (postId, postUpdate) => {
+    return await Post.findByIdAndUpdate(postId, postUpdate);
   },
   deletePost: async (postId) => {
     const post = await Post.findById(postId).exec();

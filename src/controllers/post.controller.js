@@ -16,6 +16,16 @@ const postController = {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
   },
+  getPostDetail: async (req, res) => {
+    try {
+      const { postId } = req.params;
+      const posts = await postServices.getPostDetail(postId);
+      return res.status(httpStatus.OK).json(posts);
+    } catch (err) {
+      console.log(err);
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
+    }
+  },
   createPost: async (req, res) => {
     try {
       const { id } = req.infoUser;
@@ -37,7 +47,16 @@ const postController = {
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
   },
-  updatePost: async (req, res) => {},
+  updatePost: async (req, res) => {
+    try {
+      const { postId } = req.params;
+      const dataUpdate = req.body;
+      const update = await postServices.updatePost(postId, dataUpdate);
+      return res.status(httpStatus.OK).json(update);
+    } catch (err) {
+      return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
+    }
+  },
   deletePost: async (req, res) => {
     try {
       const { postId } = req.params;
@@ -99,6 +118,7 @@ const postController = {
       });
       return res.status(httpStatus.OK).json(comment);
     } catch (err) {
+      console.log(err);
       return res.status(httpStatus.INTERNAL_SERVER_ERROR).json(err);
     }
   },

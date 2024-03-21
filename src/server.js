@@ -4,7 +4,7 @@ const createServer = require("http").createServer;
 const Server = require("socket.io").Server;
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-const connect = require("./mongoDbConfig/mongoConfig");
+const connectDB = require("./mongoDbConfig/mongoConfig");
 const apiV1 = require("./routes");
 const logger = require("./config/logger");
 const ApiError = require("./utilities/ApiError");
@@ -13,6 +13,8 @@ const { errorConverter, errorHandler } = require("./middlewares/error");
 const { DEFAULT_TIME_DELAY } = require("./constants/index");
 const { createIoInstance } = require("./socketIOConfig/socketConfig");
 const userServices = require("./services/userServices");
+const startCrons = require("./utilities/cron/cron");
+
 require("dotenv").config();
 
 const app = express();
@@ -25,7 +27,9 @@ app.use(cookieParser());
 
 app.use(bodyParser.json());
 
-connect();
+connectDB().then(() => {
+  startCrons();
+});
 
 app.get("/", (req, res) => {
   return res.status(httpStatus.OK).json("Welcome");

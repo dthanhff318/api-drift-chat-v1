@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const logger = require("../config/logger");
 
-const connect = async () => {
+const connectDB = async () => {
   await mongoose
     .connect(
       "mongodb+srv://duythanh318:CaqougtuEbFwSUt2@chat-app.x13bb1s.mongodb.net/?retryWrites=true&w=majority",
@@ -16,4 +16,4 @@ const connect = async () => {
     .finally(() => {});
 };
 
-module.exports = connect;
+module.exports = connectDB;

@@ -10,8 +10,13 @@ const commentServices = {
     return listComment;
   },
   createComment: async (data) => {
-    const post = new Comment(data);
-    return await post.save();
+    const cmtDoc = new Comment(data);
+    const newCmt = await cmtDoc.save();
+    return await newCmt.populate({
+      path: "user",
+      model: "User",
+      select: "displayName photoUrl isOnline",
+    });
   },
 };
 
