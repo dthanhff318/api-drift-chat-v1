@@ -11,4 +11,12 @@ const createIoInstance = (httpServer) => {
   });
   return ioInstance;
 };
-module.exports = { ioInstance, createIoInstance };
+
+const getIO = () => {
+  if (!ioInstance) {
+    return null;
+  } else {
+    return ioInstance;
+  }
+};
+module.exports = { ioInstance, createIoInstance, getIO };
