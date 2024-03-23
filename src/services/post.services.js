@@ -39,7 +39,7 @@ const postServices = {
     return updatePost;
   },
   updatePost: async (postId, postUpdate) => {
-    return await Post.findByIdAndUpdate(postId, postUpdate);
+    return await Post.findByIdAndUpdate(postId, postUpdate, { new: true });
   },
   deletePost: async (postId) => {
     const post = await Post.findById(postId).exec();

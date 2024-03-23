@@ -87,6 +87,10 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("ACCEPT_REQUEST", friendName);
   });
 
+  socket.on("TYPING", (data) => {
+    socket.broadcast.emit("TYPING", data);
+  });
+
   socket.on("closeApp", (data) => {
     const { id } = data;
     userServices.updateUser({
