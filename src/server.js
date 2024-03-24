@@ -91,6 +91,10 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("TYPING", data);
   });
 
+  socket.on("CHANGE_ROOM_CHAT", (data) => {
+    socket.broadcast.emit("CHANGE_ROOM_CHAT", data);
+  });
+
   socket.on("closeApp", (data) => {
     const { id } = data;
     userServices.updateUser({
