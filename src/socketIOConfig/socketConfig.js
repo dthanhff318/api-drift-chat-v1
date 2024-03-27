@@ -1,4 +1,6 @@
 const Server = require("socket.io").Server;
+const logger = require("../config/logger");
+
 require("dotenv").config();
 
 let ioInstance;
@@ -9,6 +11,7 @@ const createIoInstance = (httpServer) => {
       credentials: true,
     },
   });
+  logger.info(`Created Socket`);
   return ioInstance;
 };
 

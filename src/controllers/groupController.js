@@ -4,12 +4,19 @@ const messageServices = require("../services/messageServices");
 const { messageTypes, actionTypes } = require("../config/message");
 const httpStatus = require("http-status");
 const userServices = require("../services/userServices");
+const { getIO } = require("../socketIOConfig/socketConfig");
 
 const groupController = {
   getAllGroup: async (req, res) => {
     try {
       const { id } = req.infoUser;
       const groups = await groupServices.getGroups(id, "");
+      // socket join to all group
+      const io = getIO();
+      io &&
+        io.on("connection", (socket) => {
+          socket.join(groups.map((e) => e.id));
+        });
       return res.status(httpStatus.OK).json(groups);
     } catch (err) {
       console.log(err);

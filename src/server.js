@@ -95,6 +95,20 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("CHANGE_ROOM_CHAT", data);
   });
 
+  socket.on("CREATE_GROUP", (data) => {
+    const { groupId, members } = data;
+    members.forEach((e) => {
+      if (e !== id) {
+        socket.join(groupId);
+      }
+    });
+    socket.broadcast.emit("CREATE_GROUP", data);
+  });
+
+  socket.on("SEND_MESSAGE", (data) => {
+    socket.to(data.room).emit("SEND_MESSAGE", data);
+  });
+
   socket.on("closeApp", (data) => {
     const { id } = data;
     userServices.updateUser({

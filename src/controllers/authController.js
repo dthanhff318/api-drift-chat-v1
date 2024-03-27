@@ -11,37 +11,42 @@ const userServices = require("../services/userServices");
 
 const authControllers = {
   loginWithFireBase: async (req, res) => {
-    const { uid } = req.body;
-    const findUser = await User.findOne({ uid });
-    let userData;
-    if (findUser) {
-      userData = findUser;
-    } else {
-      const shortId = nanoid(6);
-      const userObj = new User({ ...req.body, inviteId: shortId });
-      const user = await userObj.save();
-      const friendObj = new Friend({ userId: user.id });
-      friendObj.save();
-      userData = user;
+    try {
+      const { uid } = req.body;
+      const findUser = await User.findOne({ uid });
+      let userData;
+      if (findUser) {
+        userData = findUser;
+      } else {
+        const shortId = nanoid(6);
+        const userObj = new User({ ...req.body, inviteId: shortId });
+        const user = await userObj.save();
+        const friendObj = new Friend({ userId: user.id });
+        friendObj.save();
+        userData = user;
+      }
+      const { access, refresh } = await tokenSevices.generateAuthTokens(
+        userData.id,
+        userData.displayName
+      );
+      const dataResponse = {
+        user: userData,
+        token: {
+          accessToken: access,
+          refreshToken: refresh,
+        },
+      };
+      await userServices.updateUser({
+        id: userData.id,
+        dataUpdate: {
+          isOnline: true,
+        },
+      });
+      return res.status(HTTPStatusCode.OK).json(dataResponse);
+    } catch (err) {
+      console.log(err);
+      return res.status(HTTPStatusCode.INTERNAL_SERVER_ERROR).json(err);
     }
-    const { access, refresh } = await tokenSevices.generateAuthTokens(
-      userData.id,
-      userData.displayName
-    );
-    const dataResponse = {
-      user: userData,
-      token: {
-        accessToken: access,
-        refreshToken: refresh,
-      },
-    };
-    await userServices.updateUser({
-      id: userData.id,
-      dataUpdate: {
-        isOnline: true,
-      },
-    });
-    return res.status(HTTPStatusCode.OK).json(dataResponse);
   },
   refreshToken: async (req, res) => {
     try {
