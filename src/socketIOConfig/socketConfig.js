@@ -10,6 +10,8 @@ const createIoInstance = (httpServer) => {
       origin: process.env.URL_CLIENT,
       credentials: true,
     },
+    pingTimeout: 60000,
+    reconnectionDelay: 1000,
   });
   logger.info(`Created Socket`);
   return ioInstance;
