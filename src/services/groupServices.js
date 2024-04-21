@@ -51,7 +51,7 @@ const groupServices = {
       .populate({
         path: "members admins",
         model: "User",
-        select: "displayName photoUrl lastActive uid ",
+        select: "displayName photoUrl lastActive uid fcmToken",
       })
       .populate({
         path: "theme",

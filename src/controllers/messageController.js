@@ -1,7 +1,11 @@
+const pushNotification = require("../utilities/fcmNotify/fcmNotify");
 const { HTTPStatusCode } = require("../constants");
 const messageServices = require("../services/messageServices");
 const pick = require("../utilities/pick");
 const { uploadWithCloudinary } = require("../utilities/uploadHelper");
+const groupServices = require("../services/groupServices");
+const { getNameAndAvatarChat } = require("../utilities/func");
+
 const messageController = {
   sendMessage: async (req, res) => {
     try {
@@ -10,6 +14,16 @@ const messageController = {
         ...req.body,
         senderId: id,
       });
+      const group = await groupServices.getDetailGroup(req.body.group);
+      const { nameGroup } = getNameAndAvatarChat(group, id);
+      for (const member of group.members) {
+        member.fcmToken &&
+          pushNotification({
+            title: `Dift Chat: ${nameGroup}`,
+            body: req.body.content,
+            token: member.fcmToken,
+          });
+      }
       return res.status(HTTPStatusCode.OK).json(sendMess);
     } catch (err) {
       return res.status(HTTPStatusCode.BAD_REQUEST).json(err);

@@ -5,14 +5,17 @@ const firebaseAdmin = firebase.initializeApp({
   credential: firebase.credential.cert(configFirebaseAdmin),
 });
 
-const pushNotification = () => {
+const pushNotification = (notiConfig) => {
+  const { title, body, token } = notiConfig;
   const message = {
     notification: {
-      title: "Title from server",
-      body: "Body of your notification",
+      title,
+      body,
     },
-    token:
-      "fi4wDdokHLxqtjP4bG5J8R:APA91bHkbd4FkeLTY9Jof0-sJfszzbZvT0kicRfJEnGTm4uY_6l8SKqAvd1Vm-rL6xMEpr239Ykvu8NXo7GGhltQ8cta0gZqV0gaVoiADHKoa30qUhl6nh3_UkbnLqTckYwnOOcwGzl5",
+    data: {
+      type: "Income Message",
+    },
+    token,
   };
 
   firebaseAdmin

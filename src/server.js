@@ -14,7 +14,6 @@ const { DEFAULT_TIME_DELAY } = require("./constants/index");
 const { createIoInstance } = require("./socketIOConfig/socketConfig");
 const userServices = require("./services/userServices");
 const startCrons = require("./utilities/cron/cron");
-const pushNotification = require("./utilities/fcmNotify/fcmNotify");
 require("dotenv").config();
 
 const app = express();
@@ -29,7 +28,6 @@ app.use(bodyParser.json());
 
 connectDB().then(() => {
   startCrons();
-  pushNotification();
 });
 
 app.get("/", (req, res) => {

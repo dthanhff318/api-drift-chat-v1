@@ -54,6 +54,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  fcmToken: {
+    type: String,
+    default: null,
+  },
 });
 
 // Tell Mongoose to include virtual properties when converting documents to JSON
